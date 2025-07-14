@@ -1,0 +1,17 @@
+{
+  "name": "full-stack",
+  "version": "1.0.0",
+  "description": "This a full stack application through which we are learning how to connect FrontEnd to BackEnd",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "full-stack",
+    "frontend",
+    "backend"
+  ],
+  "author": "Sanket Karmakar",
+  "license": "ISC"
+}
