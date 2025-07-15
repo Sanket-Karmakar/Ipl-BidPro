@@ -1,14 +1,12 @@
-import { useState } from 'react'
-import './App.css'
+import Home from './Components/Home'
+
 
 function App() {
 
-  const [color, setColor] = useState('grey');
-
   return (
     <>
-      <div className="container h-2 w-4 bg-amber-400" >
-
+      <div className='min-h-screen flex items-center justify-center bg-gray-50'>
+        <Home />
       </div>
     </>
   )
