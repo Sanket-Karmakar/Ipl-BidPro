@@ -11,7 +11,6 @@ const Home = () => {
       >
         Welcome to IPL BidPro 🏆
       </motion.h1>
-
       <motion.p
         className="text-gray-300 mt-4 text-lg max-w-xl"
         initial={{ opacity: 0 }}
