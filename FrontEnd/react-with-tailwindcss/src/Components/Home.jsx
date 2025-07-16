@@ -49,7 +49,7 @@ const Home = () => {
         whileTap={{ scale: 0.95 }}
         onClick={() => window.location.href = "/auction"}
       >
-        🎯 Start Auction
+        🎯 Start Analysis
       </motion.button>
     </div>
   );
