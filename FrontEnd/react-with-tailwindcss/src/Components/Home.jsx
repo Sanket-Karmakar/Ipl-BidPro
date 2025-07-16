@@ -26,7 +26,7 @@ const Home = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
-        {["Bat", "Ball", "Player", "Trophy"].map((item, index) => (
+        {["Batsmen", "Bowlers", "Players", "Results"].map((item, index) => (
           <motion.div
             key={index}
             className="bg-white/10 backdrop-blur-lg text-white rounded-xl p-6 shadow-lg hover:scale-105 transition-transform"
@@ -34,10 +34,10 @@ const Home = () => {
           >
             <h2 className="text-2xl font-bold">{item}</h2>
             <p className="mt-2 text-sm text-gray-200">
-              {item === "Bat" && "Start swinging your auction bids."}
-              {item === "Ball" && "Throw your strategy at others."}
-              {item === "Player" && "Build your dream IPL squad."}
-              {item === "Trophy" && "Win the ultimate IPL auction title!"}
+              {item === "Batsmen" && "Start swinging your auction bids."}
+              {item === "Bowlers" && "Throw your strategy at others."}
+              {item === "Players" && "Build your dream IPL squad."}
+              {item === "Results" && "Win the ultimate IPL auction title!"}
             </p>
           </motion.div>
         ))}
