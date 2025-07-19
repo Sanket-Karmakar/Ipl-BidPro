@@ -1,11 +1,12 @@
 {
   "name": "full-stack",
   "version": "1.0.0",
-  "description": "This a full stack application through which we are learning how to connect FrontEnd to BackEnd",
+  "description": "This is a full stack application through which we are learning how to connect FrontEnd to BackEnd",
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js",
+    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
   },
   "keywords": [
     "full-stack",
@@ -13,5 +14,13 @@
     "backend"
   ],
   "author": "Sanket Karmakar",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }
