@@ -1,21 +1,98 @@
-import { User } from '..user.models.js'
-import { ApiError } from '..ApiError.js'
-import { ApiResponse } from '..ApiResponse.js'
+import { User } from '../models/user.models.js'
+import { ApiError } from '../utils/ApiError.js'
+import { ApiResponse } from '../utils/ApiResponse.js'
 import { asyncHandler } from '../utils/asyncHandler.js'
 import jwt from 'jsonwebtoken'
 
-const registerUser = asyncHandler( async (req, res) => {
-    const { username, email, password, fullname } = req.body;
+const registerUser = asyncHandler(async (req, res) => {
+    const {username, email, password, fullname} = req.body;
 
-    if (!username || !email || !password || !fullname){
+    if ( !username || !email || !password || !fullname ){
         throw new ApiError(400, "All fields are required!");
     }
 
-    const existingUser = await User.finOne({ email });
-
+    const existingUser = await User.findOne({email});
     if (existingUser){
-        throw new ApiError(409, "User is already registered with this email");
+        throw new ApiError(409, "User already registered with this email!")
     }
 
-    const user = await User.create({})
-})
+    const user = await User.create({username, email, password, fullname});
+
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save({validateBeforeSave: false});
+
+    const userData = user.toObject();
+    delete userData.password;
+
+    res.status(201).json(
+        new ApiResponse(201, {
+            user: userData, accessToken, refreshToken
+    }, "User registered successfully!"));
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password){
+        throw new ApiError(400, "Both fields are required!");
+    }
+
+    const user = await User.findOne({email});
+
+    if (!user || !(await user.isPasswordCorrect(password))){
+        throw new ApiError(401, "Invalid credentials!")
+    }
+
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
+    user.refreshToken = refreshToken;
+    await user.save({validateBeforeSave: false});
+
+    const userData = user.toObject();
+    delete userData.password;
+
+    res.status(200).json(
+        new ApiResponse(200, {
+            user: userData, accessToken, refreshToken
+    }, "User successfully logged in!"))
+});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const incomingToken = req.body.refreshToken;
+
+    if (!incomingToken){
+        throw new ApiError(400, "Refresh token is required!");
+    }
+
+    try{
+        const decoded = jwt.verify(incomingToken, process.env.REFRESH_TOKEN_SECRET);
+
+        const user = await User.findById(decoded._id);
+        if (!user || user.refreshToken !== incomingToken){
+            throw new ApiError(401, "Invalid refresh token!")
+        }
+
+        const newAccessToken = await user.generateAccessToken();
+        const newRefreshToken = await user.generateRefreshToken();
+
+        user.refreshToken = newRefreshToken;
+        await user.save({validateBeforeSave: false});
+
+        res.status(200).json(
+            new ApiResponse(200, {
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken
+            }, "Token Refreshed")
+        );
+    }
+    catch (error) {
+        throw new ApiError(401, "Invalid or expired refresh token!");
+    }
+
+});
+
+export { registerUser, loginUser, refreshAccessToken };
+
