@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js'
+import userRoutes from './routes/user.routes.js'
 
 dotenv.config({path: './env'});
 
@@ -19,10 +20,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
-
-app.listen(process.env.PORT, () => {
-    console.log(`Example app listening on port : ${process.env.PORT}`);
-});
+app.use('/api/users', userRoutes);
 
 export { app };
 
