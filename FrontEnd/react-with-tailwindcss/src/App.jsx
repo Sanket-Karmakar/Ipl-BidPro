@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home"; 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import PlayerAnalysis from "./pages/PlayerAnalysis";
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard/*" element={<Dashboard />}>
+          <Route path="player/:id" element={<PlayerAnalysis />} />
+        </Route>
       </Routes>
     </Router>
   );

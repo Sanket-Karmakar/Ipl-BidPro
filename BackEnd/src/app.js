@@ -2,25 +2,53 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import authRoutes from './routes/auth.routes.js'
-import userRoutes from './routes/user.routes.js'
+import mongoose from 'mongoose';
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import connectDB from './db/index.js'; // assuming db/index.js exports the connect function
 
-dotenv.config({path: './env'});
+// Load environment variables
+dotenv.config({ path: '../env' });
 
+// Create app
 const app = express();
 
-app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}));
+// CORS (adjust origin if frontend is hosted elsewhere later)
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
 
-app.use(express.json({limit: '16kb'}));
-app.use(express.urlencoded({extended: true, limit: '16kb'}));
-app.use(express.static("public"));
+// Body parsing
+app.use(express.json({ limit: '16kb' }));
+app.use(express.urlencoded({ extended: true, limit: '16kb' }));
+
+// Static files & cookies
+app.use(express.static('public'));
 app.use(cookieParser());
 
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
-export { app };
+// Health check
+app.get('/', (req, res) => {
+  res.send({ status: 'ok', message: 'IPL BidPro backend is running' });
+});
 
+// Connect to DB and start server
+const PORT = process.env.PORT || 5001;
+
+connectDB()
+  .then(() => {
+    console.log('MongoDB connected successfully.');
+    app.listen(PORT, () => {
+      console.log(`Server running on port: ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  });

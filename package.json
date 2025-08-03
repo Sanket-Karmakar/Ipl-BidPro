@@ -1,12 +1,18 @@
 {
+  "name": "ipl-bidpro-root",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix FrontEnd/react-with-tailwindcss\" \"npm run dev --prefix BackEnd\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "nodemon": "^3.1.10"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
   }
 }
