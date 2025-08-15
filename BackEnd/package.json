@@ -16,10 +16,12 @@
   "author": "Sanket Karmakar",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.4"
   },
   "devDependencies": {

@@ -1,57 +1,83 @@
-import React from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Signup() {
+export default function Signup() {
+  const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:5001/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullname, username, email, password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "Signup failed");
+
+      alert("Signup successful! Please log in.");
+      navigate("/login");
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <>
-      <div className="h-screen w-screen bg-[#f2f4f7] flex items-center justify-center">
-        <div className="left h-[50vh] w-[38vw] min-w-[480px] px-3 py-8 flex flex-col items-center justify-center text-center">
-          <img
-            src="https://i.pinimg.com/736x/96/21/49/962149f905f2598b3e71887fafb2708f.jpg"
-            alt="IPL BidPro"
-            width="300px"
-            className="rounded-2xl mb-4 shadow-lg"
-          />
-          <p className="text-2xl font-sans text-gray-700 px-6">
-            Join IPL BidPro and start creating your ultimate fantasy cricket team today.
-          </p>
-        </div>
-
-        <div className="right h-[65vh] w-[38vw] min-w-[480px] text-center px-3 py-4">
-          <div className="signup-container flex flex-col bg-white rounded-xl w-[425px] h-[400px] shadow-2xl font-sans m-auto">
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="h-12 w-[400px] border rounded-lg border-gray-300 px-3 m-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-            <input
-              type="email"
-              placeholder="Email address"
-              className="h-12 w-[400px] border rounded-lg border-gray-300 px-3 m-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="h-12 w-[400px] border rounded-lg border-gray-300 px-3 m-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className="h-12 w-[400px] border rounded-lg border-gray-300 px-3 m-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            />
-            <button className="bg-green-500 text-white w-[200px] rounded-md h-12 mx-auto mt-5 text-[16px] font-bold cursor-pointer transition transform hover:scale-105 hover:brightness-110 shadow-md">
-              Sign Up
-            </button>
-          </div>
-          <p className="py-3 text-sm font-sans">
-            Already have an account?{' '}
-            <a href="/login" className="text-blue-600 hover:underline font-medium">
-              Log in
-            </a>
-          </p>
-        </div>
-      </div>
-    </>
+    <div className="h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleSignup}
+        className="bg-white p-8 rounded-lg shadow-md w-96 space-y-4"
+      >
+        <h2 className="text-2xl font-bold text-center">Create Account</h2>
+        <input
+          type="text"
+          placeholder="Full Name"
+          value={fullname}
+          onChange={(e) => setFullname(e.target.value)}
+          required
+          className="w-full border rounded px-3 py-2"
+        />
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          className="w-full border rounded px-3 py-2"
+        />
+        <input
+          type="email"
+          placeholder="Email Address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full border rounded px-3 py-2"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="w-full border rounded px-3 py-2"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+        >
+          {loading ? "Creating account..." : "Sign Up"}
+        </button>
+      </form>
+    </div>
   );
 }
-
-export default Signup;
