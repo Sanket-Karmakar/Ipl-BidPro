@@ -4,7 +4,8 @@ import { statsSchema } from './stats.models.js'
 const playerSchema = new Schema({
     playerId: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     name: {
         type: String,
@@ -26,7 +27,8 @@ const playerSchema = new Schema({
         type: String
     },
     country: {
-        type: String
+        type: String,
+        required: true
     },
     playerImg: {
         type: String

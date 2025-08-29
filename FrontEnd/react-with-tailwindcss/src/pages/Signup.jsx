@@ -1,6 +1,10 @@
 import React from 'react';
+import axios from '../utils/axios.js';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="h-screen w-screen bg-[#f2f4f7] flex items-center justify-center">
