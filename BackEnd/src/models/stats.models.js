@@ -1,14 +1,22 @@
-import { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-export const statsSchema = new Schema({
+export const statsSchema = new mongoose.Schema({
+    scope: {
+        type: String,
+        enum: ["Career", "Season"],
+        default: "Career"
+    },
+    season: {
+        type: String
+    },
     matchType: {
         type: String,
-        enum: ["ipl", "odi", "test", "t20"],
+        enum: ["IPL", "ODI", "Test", "T20"],
         required: true
     },
     fn: {
         type: String,
-        enum: ["batting", "bowling"],
+        enum: ["batting", "bowling", "fielding"],
         required: true
     }, 
     stat: {
@@ -16,8 +24,11 @@ export const statsSchema = new Schema({
         required: true
     },
     value: {
+        type: Number,
+        default: 0
+    },
+    unit: {
         type: String
     }
 }, {_id: false});
-
 

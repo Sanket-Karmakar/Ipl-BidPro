@@ -5,60 +5,59 @@ import { asyncHandler } from '../utils/asyncHandler.js'
 import jwt from 'jsonwebtoken'
 
 const registerUser = asyncHandler(async (req, res) => {
-    const {username, email, password, fullname} = req.body;
+  const { fullname, username, email, password } = req.body;
 
-    if ( !username || !email || !password || !fullname ){
-        throw new ApiError(400, "All fields are required!");
-    }
+  if (!fullname || !username || !email || !password) {
+    throw new ApiError(400, "All fields are required!");
+  }
 
-    const existingUser = await User.findOne({email});
-    if (existingUser){
-        throw new ApiError(409, "User already registered with this email!")
-    }
+  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  if (existingUser) {
+    throw new ApiError(409, "User already exists with this email or username");
+  }
 
-    const user = await User.create({username, email, password, fullname});
+  const user = await User.create({ fullname, username, email, password });
 
-    const accessToken = await user.generateAccessToken();
-    const refreshToken = await user.generateRefreshToken();
+  const userData = user.toObject();
+  delete userData.password;
 
-    user.refreshToken = refreshToken;
-    await user.save({validateBeforeSave: false});
-
-    const userData = user.toObject();
-    delete userData.password;
-
-    res.status(201).json(
-        new ApiResponse(201, {
-            user: userData, accessToken, refreshToken
-    }, "User registered successfully!"));
+  return res
+    .status(201)
+    .json(new ApiResponse(201, userData, "User registered successfully!"));
 });
+
 
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    if (!email || !password){
-        throw new ApiError(400, "Both fields are required!");
-    }
+  if (!email || !password) {
+    throw new ApiError(400, "Both fields are required!");
+  }
 
-    const user = await User.findOne({email});
+  const user = await User.findOne({ email });
 
-    if (!user || !(await user.isPasswordCorrect(password))){
-        throw new ApiError(401, "Invalid credentials!")
-    }
+  if (!user || !(await user.isPasswordCorrect(password))) {
+    throw new ApiError(401, "Invalid credentials!");
+  }
 
-    const accessToken = await user.generateAccessToken();
-    const refreshToken = await user.generateRefreshToken();
-    user.refreshToken = refreshToken;
-    await user.save({validateBeforeSave: false});
+  const accessToken = await user.generateAccessToken();
+  const refreshToken = await user.generateRefreshToken();
 
-    const userData = user.toObject();
-    delete userData.password;
+  user.refreshToken = refreshToken;
+  await user.save({ validateBeforeSave: false });
 
-    res.status(200).json(
-        new ApiResponse(200, {
-            user: userData, accessToken, refreshToken
-    }, "User successfully logged in!"))
+  const userData = user.toObject();
+  delete userData.password;
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      { user: userData, accessToken, refreshToken },
+      "User successfully logged in!"
+    )
+  );
 });
+
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingToken = req.body.refreshToken;

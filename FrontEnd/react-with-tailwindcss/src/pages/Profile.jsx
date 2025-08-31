@@ -1,97 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from '../utils/axios';
-import { Card, CardContent } from './components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
-import { Badge } from './components/ui/badge';
+import { useAuth } from "../context/UserContext";
 
-const UserProfile = () => {
-  const { username } = useParams();
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get(`/api/users/${username}`);
-        setUser(res.data.user);
-      } catch (error) {
-        console.error("Failed to load user", error);
-      }
-    };
-
-    fetchProfile();
-  }, [username]);
-
-  if (!user) return <div className="text-center py-10">Loading...</div>;
+export default function Profile() {
+  const { user, logout } = useAuth();
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-5 bg-white shadow rounded-xl">
-      <div className="flex items-center space-x-6">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src={user.profileImage} alt={user.username} />
-          <AvatarFallback>{user.username[0]?.toUpperCase()}</AvatarFallback>
-        </Avatar>
-        <div>
-          <h1 className="text-2xl font-semibold capitalize">{user.fullname}</h1>
-          <p className="text-sm text-gray-500">@{user.username}</p>
-          <p className="text-sm text-gray-600">{user.email}</p>
-          <Badge className="mt-2 bg-yellow-500 text-white">
-            Coins: {user.fantasyCoins}
-          </Badge>
+    <div className="min-h-screen bg-gradient-to-b from-yellow-100 to-white p-8">
+      {/* Profile Header */}
+      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="relative h-32 bg-gradient-to-r from-yellow-400 to-orange-500">
+          <img
+            src={user?.avatar || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+            alt="User Avatar"
+            className="absolute -bottom-12 left-8 h-24 w-24 rounded-full border-4 border-white object-cover"
+          />
         </div>
-      </div>
 
-      {/* Favorites Section */}
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-3">Favorite Players</h2>
-        {user.favorites.length === 0 ? (
-          <p className="text-gray-500">No favorites yet.</p>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {user.favorites.map(player => (
-              <Card key={player._id}>
-                <CardContent className="p-4">
-                  <img src={player.playerImg} alt={player.name} className="h-24 w-full object-cover rounded" />
-                  <div className="mt-2 text-center">
-                    <p className="font-semibold">{player.name}</p>
-                    <p className="text-sm text-gray-500">{player.country}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        {/* User Info */}
+        <div className="mt-16 px-8 pb-6">
+          <h1 className="text-2xl font-bold">{user?.fullname || user?.username}</h1>
+          <p className="text-gray-600">@{user?.username}</p>
+          <p className="text-gray-500">{user?.email}</p>
+
+          {/* Quick Stats */}
+          <div className="mt-6 grid grid-cols-3 gap-4 text-center">
+            <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+              <p className="text-lg font-bold text-gray-800">12</p>
+              <p className="text-xs text-gray-500">Matches Played</p>
+            </div>
+            <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+              <p className="text-lg font-bold text-green-600">8</p>
+              <p className="text-xs text-gray-500">Wins</p>
+            </div>
+            <div className="bg-gray-100 p-4 rounded-lg shadow-sm">
+              <p className="text-lg font-bold text-red-500">4</p>
+              <p className="text-xs text-gray-500">Losses</p>
+            </div>
           </div>
-        )}
-      </div>
 
-      {/* Team History */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-3">Team History</h2>
-        {user.teamHistory.length === 0 ? (
-          <p className="text-gray-500">No teams created yet.</p>
-        ) : (
-          <ul className="list-disc list-inside text-gray-700">
-            {user.teamHistory.map(teamId => (
-              <li key={teamId}>Team ID: {teamId}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* Match History */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-3">Match History</h2>
-        {user.matchHistory.length === 0 ? (
-          <p className="text-gray-500">No match history available.</p>
-        ) : (
-          <ul className="list-disc list-inside text-gray-700">
-            {user.matchHistory.map(matchId => (
-              <li key={matchId}>Match ID: {matchId}</li>
-            ))}
-          </ul>
-        )}
+          {/* Actions */}
+          <div className="mt-8 flex gap-4">
+            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+              Edit Profile
+            </button>
+            <button
+              onClick={logout}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
-};
-
-export default UserProfile;
+}
