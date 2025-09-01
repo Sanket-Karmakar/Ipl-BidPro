@@ -5,7 +5,9 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
-import connectDB from './db/index.js'; // assuming db/index.js exports the connect function
+import matchRoutes from './routes/match.routes.js';
+import connectDB from './db/index.js';
+import './jobs/scheduler.js';
 
 // Load environment variables
 dotenv.config({ path: '../env' });
@@ -32,6 +34,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/matches', matchRoutes);
 
 // Health check
 app.get('/', (req, res) => {
@@ -52,3 +55,4 @@ connectDB()
     console.error('Failed to connect to MongoDB:', err);
     process.exit(1);
   });
+

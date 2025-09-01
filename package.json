@@ -17,6 +17,8 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.539.0",
     "mongoose": "^8.16.4",
+    "node-cron": "^4.2.1",
+    "node-fetch": "^3.3.2",
     "prop-types": "^15.8.1"
   }
 }
