@@ -43,5 +43,5 @@ playerSchema.index({ name: 1 });
 playerSchema.index({ country: 1, role: 1 });
 playerSchema.index({ "stats.season": 1, "stats.matchType": 1 });
 
-export const Player = mongoose.model("Player", playerSchema);
 
+export const Player = mongoose.model("Player", playerSchema);

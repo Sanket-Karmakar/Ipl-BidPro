@@ -7,7 +7,11 @@ const importPlayer = asyncHandler ( async (req, res) => {
     const data = req.body;
 
     if (!data || !data.id || !data.name){
+<<<<<<< HEAD
+        throw new ApiError(400, "Invalid player data!");
+=======
         throw new ApiError(400, "Invalid player data!")
+>>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b
     }
 
     const formattedStats = [];
@@ -53,5 +57,9 @@ const importPlayer = asyncHandler ( async (req, res) => {
     );
 });
 
+<<<<<<< HEAD
+export { importPlayer };
+=======
 export { importPlayer };
 
+>>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b

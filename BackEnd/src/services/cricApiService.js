@@ -35,5 +35,9 @@ export async function fetchMatchDetails (matchId) {
         console.log(`Error fetching match details: `, error.message);
         throw new Error(`Failed to fetch match details from CricAPI`);
     }
+<<<<<<< HEAD
+}
+=======
 }
 
+>>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b

@@ -7,4 +7,3 @@ router.get('/', getAllMatches);
 router.get('/:id', getMatchById);
 
 export default router;
-

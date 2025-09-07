@@ -30,5 +30,9 @@ export const statsSchema = new mongoose.Schema({
     unit: {
         type: String
     }
+<<<<<<< HEAD
+}, {_id: false});
+=======
 }, {_id: false});
 
+>>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b
