@@ -5,8 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "seed:players": "node src/scripts/seedPlayers.js",
     "start": "node src/app.js",
-    "dev": "nodemon -r dotenv/config --experimental-json-modules src/app.js"
+    "dev": "nodemon src/app.js"
   },
   "keywords": [
     "full-stack",
@@ -16,13 +17,15 @@
   "author": "Sanket Karmakar",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.16.4"
+    "mongoose": "^8.16.4",
+    "node-cron": "^4.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

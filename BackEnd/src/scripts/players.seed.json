@@ -1,0 +1,60 @@
+[
+  {
+    "playerId": "rohit-001",
+    "name": "Rohit Sharma",
+    "dateOfBirth": "1987-04-30",
+    "role": "Batsman",
+    "battingStyle": "Right-hand bat",
+    "bowlingStyle": "Right-arm offbreak",
+    "placeOfBirth": "Nagpur, India",
+    "country": "India",
+    "playerImg": "https://img1.hscicdn.com/image/upload/f_auto,t_ds_square_w_320,q_50/lsci/db/PICTURES/CMS/385800/385819.2.png",
+    "stats": [
+      {
+        "matchType": "odi",
+        "stats": [
+          { "type": "batting", "stat": "Matches", "value": "262" },
+          { "type": "batting", "stat": "Runs", "value": "10709" },
+          { "type": "batting", "stat": "100s", "value": "31" },
+          { "type": "batting", "stat": "50s", "value": "55" }
+        ]
+      },
+      {
+        "matchType": "ipl",
+        "stats": [
+          { "type": "batting", "stat": "Matches", "value": "243" },
+          { "type": "batting", "stat": "Runs", "value": "6500" }
+        ]
+      }
+    ]
+  },
+  {
+    "playerId": "virat-001",
+    "name": "Virat Kohli",
+    "dateOfBirth": "1988-11-05",
+    "role": "Batsman",
+    "battingStyle": "Right-hand bat",
+    "bowlingStyle": "Right-arm medium",
+    "placeOfBirth": "Delhi, India",
+    "country": "India",
+    "playerImg": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Virat_Kohli_during_the_India_vs_Aus_4th_Test_match_at_Narendra_Modi_Stadium_on_09_March_2023.jpg/500px-Virat_Kohli_during_the_India_vs_Aus_4th_Test_match_at_Narendra_Modi_Stadium_on_09_March_2023.jpg",
+    "stats": [
+      {
+        "matchType": "odi",
+        "stats": [
+          { "type": "batting", "stat": "Matches", "value": "292" },
+          { "type": "batting", "stat": "Runs", "value": "13848" },
+          { "type": "batting", "stat": "100s", "value": "50" },
+          { "type": "batting", "stat": "50s", "value": "72" }
+        ]
+      },
+      {
+        "matchType": "ipl",
+        "stats": [
+          { "type": "batting", "stat": "Matches", "value": "252" },
+          { "type": "batting", "stat": "Runs", "value": "8000" }
+        ]
+      }
+    ]
+  }
+]

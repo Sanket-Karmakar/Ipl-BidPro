@@ -2,13 +2,14 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import mongoose from 'mongoose';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
-import connectDB from './db/index.js'; // assuming db/index.js exports the connect function
+import matchRoutes from './routes/match.routes.js';
+import connectDB from './db/index.js';
+import './jobs/scheduler.js';
 
 // Load environment variables
-dotenv.config({ path: '../env' });
+dotenv.config({ path: '.env' });
 
 // Create app
 const app = express();
@@ -24,19 +25,28 @@ app.use(
 // Body parsing
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
-
-// Static files & cookies
-app.use(express.static('public'));
 app.use(cookieParser());
+app.use(express.static('public'));
+
+
+// Health check
+app.get('/', (_req, res) => {
+  res.send({ status: 'ok', message: 'IPL BidPro backend is running' });
+});
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok", service: "crickbid-backend" });
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/matches', matchRoutes);
 
-// Health check
-app.get('/', (req, res) => {
-  res.send({ status: 'ok', message: 'IPL BidPro backend is running' });
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: "Not found" });
 });
+
 
 // Connect to DB and start server
 const PORT = process.env.PORT || 5001;

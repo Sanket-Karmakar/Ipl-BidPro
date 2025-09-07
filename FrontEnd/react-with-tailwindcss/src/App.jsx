@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Matches from "./pages/Matches";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+         <Route path="/matches" element={<Matches />} />
          <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>

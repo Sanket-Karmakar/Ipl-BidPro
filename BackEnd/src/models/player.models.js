@@ -1,20 +1,24 @@
-import mongoose, { Schema } from 'mongoose'
-import { statsSchema } from './stats.models.js'
+import mongoose from 'mongoose';
+import { statsSchema } from './stats.models.js';
 
-const playerSchema = new Schema({
+const playerSchema = new mongoose.Schema({
     playerId: {
         type: String,
-        unique: true
+        unique: true,
+        required: true,
+        trim: true
     },
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     dateOfBirth: {
         type: Date
     },
     role: {
-        type: String
+        type: String,
+        enum: ["Batsman", "Bowler", "All-Rounder", "Wicket-Keeper"]
     },
     battingStyle: {
         type: String
@@ -26,7 +30,8 @@ const playerSchema = new Schema({
         type: String
     },
     country: {
-        type: String
+        type: String,
+        required: true
     },
     playerImg: {
         type: String
@@ -34,5 +39,7 @@ const playerSchema = new Schema({
     stats: [statsSchema]
 }, {timestamps: true});
 
-export const Player = mongoose.model("Player", playerSchema);
+playerSchema.index({ name: 1 });
+playerSchema.index({ country: 1, role: 1 });
 
+export const Player = mongoose.model("Player", playerSchema);
