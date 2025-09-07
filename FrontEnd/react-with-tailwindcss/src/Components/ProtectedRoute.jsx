@@ -9,3 +9,4 @@ export default function ProtectedRoute() {
 
   return user ? <Outlet /> : <Navigate to="/login" replace />;
 }
+

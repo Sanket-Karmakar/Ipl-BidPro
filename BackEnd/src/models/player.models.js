@@ -41,5 +41,10 @@ const playerSchema = new mongoose.Schema({
 
 playerSchema.index({ name: 1 });
 playerSchema.index({ country: 1, role: 1 });
+<<<<<<< HEAD
+=======
+
+export const Player = mongoose.model("Player", playerSchema);
+>>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b
 
 export const Player = mongoose.model("Player", playerSchema);

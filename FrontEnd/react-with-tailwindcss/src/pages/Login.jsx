@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
+import { AuthLayout } from "../components/AuthLayout.jsx";
 
 const Login = () => {
   const { login, loading } = useAuth();
