@@ -4,21 +4,21 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const http = axios.create({
-  baseURL: process.env.CRICKET_BASE_URL,
+  baseURL: process.env.CRICAPI_BASE_URL,  // matches .env
   timeout: 15000,
 });
 
 const withKey = (params = {}) => ({
-  apikey: process.env.CRICKET_API_KEY,
+  apikey: process.env.CRIC_API_KEY,  // matches .env
   ...params,
 });
 
 function assertConfig() {
-  if (!process.env.CRICKET_BASE_URL) {
-    throw new Error('[cricket.service] CRICKET_BASE_URL missing in .env');
+  if (!process.env.CRICAPI_BASE_URL) {
+    throw new Error('[cricket.service] CRICAPI_BASE_URL missing in .env');
   }
-  if (!process.env.CRICKET_API_KEY) {
-    throw new Error('[cricket.service] CRICKET_API_KEY missing in .env');
+  if (!process.env.CRIC_API_KEY) {
+    throw new Error('[cricket.service] CRIC_API_KEY missing in .env');
   }
 }
 

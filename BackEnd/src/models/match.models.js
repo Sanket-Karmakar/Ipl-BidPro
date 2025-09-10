@@ -16,9 +16,7 @@ const teamInfoSchema = new mongoose.Schema({
 const matchSchema = new mongoose.Schema({
     matchId: {
         type: String,
-        required: true,
-        unique: true,
-        index: true
+        required: true
     },
     name: { type: String },
     matchType: {

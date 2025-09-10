@@ -8,7 +8,7 @@ const API_KEY = process.env.CRIC_API_KEY;
 // fetch all matches (defensive parsing & normalization)
 export async function fetchMatchesFromAPI () {
     try {
-        const response = await axios.get(`${CRICAPI_BASE_URL}/matches`, {
+        const response = await axios.get(`${BASE_URL}/matches`, {
             params: { apikey: API_KEY },
             timeout: 15000
         });
@@ -67,7 +67,7 @@ export async function fetchMatchesFromAPI () {
 // fetch match details by id (keeps behavior but returns normalized object)
 export async function fetchMatchDetails (matchId) {
     try {
-        const response = await axios.get(`${CRICAPI_BASE_URL}/match_info`, {
+        const response = await axios.get(`${BASE_URL}/match_info`, {
             params: { apikey: API_KEY, id: matchId },
             timeout: 15000
         });
