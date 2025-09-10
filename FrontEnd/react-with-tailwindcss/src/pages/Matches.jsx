@@ -5,7 +5,7 @@ const Matches = () => {
   const [matches, setMatches] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/matches")
+    fetch("http://localhost:5001/api/matches/upcoming")
       .then((res) => res.json())
       .then((data) => setMatches(data || [])) // API gives [] directly
       .catch((err) => console.error("Error fetching matches:", err));
