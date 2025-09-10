@@ -38,8 +38,6 @@ export async function updateMatches() {
     } catch (err) {
         console.error("Error updating matches:", err.message);
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b
+
