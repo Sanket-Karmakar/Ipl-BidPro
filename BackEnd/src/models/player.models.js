@@ -31,17 +31,20 @@ const playerSchema = new mongoose.Schema({
     },
     country: {
         type: String,
-        required: true
+        required: false,
+        default: ""
     },
     playerImg: {
-        type: String
+        type: String,
+        default: ""
     },
     stats: [statsSchema]
 }, {timestamps: true});
 
 playerSchema.index({ name: 1 });
 playerSchema.index({ country: 1, role: 1 });
-playerSchema.index({ "stats.season": 1, "stats.matchType": 1 });
-
+playerSchema.index({ "stats.matchType": 1 });
+playerSchema.index({ "stats.fn": 1 });
 
 export const Player = mongoose.model("Player", playerSchema);
+

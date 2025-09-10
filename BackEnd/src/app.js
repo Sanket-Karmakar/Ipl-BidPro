@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import matchRoutes from './routes/match.routes.js';
+import playerRoutes from './routes/player.routes.js';
 import connectDB from './db/index.js';
 import './jobs/scheduler.js';
 
@@ -42,6 +43,7 @@ app.get("/health", (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/matches', matchRoutes);
+app.use('/api/players', playerRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Not found" });

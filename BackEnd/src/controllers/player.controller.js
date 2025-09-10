@@ -1,56 +1,37 @@
-import { Player } from '../models/player.models.js'
-import { ApiResponse } from '../utils/ApiResponse.js'
-import { ApiError } from '../utils/ApiError.js'
-import { asyncHandler } from '../utils/asyncHandler.js'
+import { fetchAndStorePlayerStats } from "../services/playerStats.service.js";
+import { Player } from "../models/player.models.js";
 
-const importPlayer = asyncHandler ( async (req, res) => {
-    const data = req.body;
-
-    if (!data || !data.id || !data.name){
-        throw new ApiError(400, "Invalid player data!");
+export async function fetchPlayerStatsController(req, res) {
+  try {
+    const playerName = req.query.name;
+    if (!playerName) {
+      return res.status(400).json({ error: "Player name is required in query param `name`." });
     }
 
-    const formattedStats = [];
-
-    for (const matchType of Object.keys(data.stats || {})){
-        const matchStats = data.stats[matchType];
-
-        for (const fn of ["batting", "bowling"]){
-            if (matchStats[fn]){
-                for (const statKey in matchStats[fn]) {
-                    formattedStats.push({
-                        matchType,
-                        fn,
-                        stat: statKey,
-                        value: matchStats[fn][statKey]?.toString() ?? "0"
-                    });
-                }
-            }
-        }
+    const player = await fetchAndStorePlayerStats(playerName);
+    if (!player) {
+      return res.status(404).json({ error: `No player found for "${playerName}"` });
     }
 
-    const playerDoc = {
-        playerId: data.id,
-        name: data.name,
-        dateOfBirth: data.dateOfBirth,
-        role: data.role,
-        battingStyle: data.battingStyle,
-        bowlingStyle: data.bowlingStyle,
-        placeOfBirth: data.placeOfBirth,
-        country: data.country,
-        playerImg: data.playerImg,
-        stats: formattedStats
-    };
+    res.json(player);
+  } catch (error) {
+    console.error("❌ Error in fetchPlayerStatsController:", error.message);
+    res.status(500).json({ error: "Failed to fetch player stats." });
+  }
+}
 
-    const player = await Player.findOneAndUpdate(
-        { playerId: data.id },
-        playerDoc,
-        { upsert: true, new: true }
-    );
+export async function getPlayerController(req, res) {
+  try {
+    const playerId = req.params.id;
+    const player = await Player.findOne({ playerId });
 
-    res.status(201).json(
-        new ApiResponse(201, player, "Player imported successfully!")
-    );
-});
+    if (!player) {
+      return res.status(404).json({ error: "Player not found in DB." });
+    }
 
-export { importPlayer };
+    res.json(player);
+  } catch (error) {
+    console.error("❌ Error in getPlayerController:", error.message);
+    res.status(500).json({ error: "Failed to get player." });
+  }
+}
