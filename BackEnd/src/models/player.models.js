@@ -46,4 +46,9 @@ playerSchema.index({ country: 1, role: 1 });
 playerSchema.index({ "stats.matchType": 1 });
 playerSchema.index({ "stats.fn": 1 });
 
+<<<<<<< HEAD
 export const Player = mongoose.model("Player", playerSchema);
+=======
+export const Player = mongoose.model("Player", playerSchema);
+
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e

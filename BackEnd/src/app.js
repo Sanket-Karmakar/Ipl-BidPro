@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import playerRoutes from './routes/player.routes.js';
 import matchRoutes from './routes/match.routes.js';
+import playerRoutes from './routes/player.routes.js';
 import connectDB from './db/index.js';
 import './jobs/scheduler.js';
 

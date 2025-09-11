@@ -95,4 +95,8 @@ teamSchema.pre("validate", function (next) {
     next();
 });
 
+<<<<<<< HEAD
 export const Team = mongoose.model("Team", teamSchema);
+=======
+export const Team = mongoose.model("Team", teamSchema);
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e

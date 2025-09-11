@@ -34,4 +34,8 @@ cron.schedule('*/30 * * * *', async () => {
     }
 });
 
+<<<<<<< HEAD
 console.log('Scheduler initialized: Matches will update every 30 minutes');
+=======
+console.log('Scheduler initialized: Matches will update every 30 minutes');
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e

@@ -15,7 +15,20 @@ export async function fetchAndStorePlayerStats(playerName) {
     try {
         // --- Step 1: Search player by name to get CricAPI ID ---
         const searchUrl = `${CRICAPI_BASE_URL}/players?apikey=${CRICAPI_KEY}&offset=0&search=${encodeURIComponent(playerName)}`;
+<<<<<<< HEAD
         
+=======
+        const searchResponse = await axios.get(searchUrl);
+
+        if (
+            searchResponse.data.status !== "success" ||
+            !Array.isArray(searchResponse.data.data) ||
+            searchResponse.data.data.length === 0
+        ) {
+            console.warn(`⚠️ No player found for "${playerName}" or API search failed.`);
+            return null;
+        }
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e
 
         const cricApiPlayerId = searchResponse.data.data[0].id;
         console.log(`✅ Found CricAPI ID for ${playerName}: ${cricApiPlayerId}`);
@@ -56,4 +69,8 @@ export async function fetchAndStorePlayerStats(playerName) {
         }
         return null;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e

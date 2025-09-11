@@ -123,4 +123,8 @@ export function normalizeCricApiResponse(cricApiResponse) {
     });
 
     return normalizedPlayer;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e

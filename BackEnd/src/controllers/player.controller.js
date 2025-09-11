@@ -34,4 +34,8 @@ export async function getPlayerController(req, res) {
     console.error("❌ Error in getPlayerController:", error.message);
     res.status(500).json({ error: "Failed to get player." });
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e
