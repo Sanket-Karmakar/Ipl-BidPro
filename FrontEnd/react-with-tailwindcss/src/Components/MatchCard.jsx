@@ -1,60 +1,51 @@
-import { motion } from "framer-motion";
-
-const MatchCard = ({ match }) => {
-  const team1 = match.teamInfo[0];
-  const team2 = match.teamInfo[1];
+// src/components/MatchCard.jsx
+function MatchCard({ match }) {
+  const { teamInfo, name, venue, status, matchEnded, score } = match;
 
   return (
-    <motion.div
-      className="bg-white rounded-2xl shadow-md p-4 w-80 flex flex-col justify-between hover:shadow-xl transition"
-      whileHover={{ scale: 1.05 }}
-    >
-      {/* Match Title */}
-      <h2 className="text-sm font-semibold text-gray-600 text-center mb-2">
-        {match.name}
-      </h2>
-
+    <div className="border rounded-xl shadow-md p-4 bg-white hover:shadow-lg transition">
       {/* Teams */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex flex-col items-center">
-          <img
-            src={team1?.img}
-            alt={team1?.name}
-            className="h-12 w-12 object-contain mb-1"
-          />
-          <p className="text-sm font-bold text-gray-800">{team1?.shortname}</p>
-        </div>
-
-        <span className="text-gray-500 font-bold">VS</span>
-
-        <div className="flex flex-col items-center">
-          <img
-            src={team2?.img}
-            alt={team2?.name}
-            className="h-12 w-12 object-contain mb-1"
-          />
-          <p className="text-sm font-bold text-gray-800">{team2?.shortname}</p>
-        </div>
+      <div className="flex items-center justify-between">
+        {teamInfo?.map((team, idx) => (
+          <div key={idx} className="flex flex-col items-center w-1/2">
+            <img
+              src={team.img}
+              alt={team.name}
+              className="w-12 h-12 object-contain mb-2"
+            />
+            <p className="text-sm font-semibold">{team.shortname || team.name}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Venue & Date */}
-      <p className="text-xs text-gray-500 text-center mb-1">📍 {match.venue}</p>
-      <p className="text-xs text-gray-500 text-center">
-        🕒 {new Date(match.dateTimeGMT).toLocaleString()}
-      </p>
+      {/* Match Name */}
+      <p className="mt-3 text-center text-gray-700 text-sm font-medium">{name}</p>
 
-      {/* Status */}
-      <div
-        className={`mt-3 text-center px-3 py-1 rounded-full text-white text-xs font-semibold ${
-          match.matchStarted
-            ? "bg-red-500 animate-pulse"
-            : "bg-green-500"
-        }`}
-      >
-        {match.status}
-      </div>
-    </motion.div>
+      {/* Venue */}
+      <p className="text-xs text-gray-500 text-center">{venue}</p>
+
+      {/* Completed Match → show result + score */}
+      {matchEnded ? (
+        <div className="mt-2 text-center">
+          {score?.length > 0 ? (
+            <div className="space-y-1">
+              {score.map((s, i) => (
+                <p key={i} className="text-xs text-gray-700">
+                  <span className="font-semibold">{s.inning}</span>: {s.r}/{s.w} ({s.o} ov)
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-gray-400">No scorecard available</p>
+          )}
+          <p className="mt-1 text-sm font-bold text-green-600">{status}</p>
+        </div>
+      ) : (
+        // Upcoming/Ongoing
+        <p className="mt-2 text-center text-sm text-blue-500">{status}</p>
+      )}
+    </div>
   );
-};
+}
 
 export default MatchCard;

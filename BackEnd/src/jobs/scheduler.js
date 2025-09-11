@@ -17,8 +17,8 @@ let isRunning = false;
     }
 })();
 
-// schedule every 4 hours; guard against overlap with isRunning flag
-cron.schedule('0 */4 * * *', async () => {
+// schedule every 30 minutes; guard against overlap with isRunning flag
+cron.schedule('*/30 * * * *', async () => {
     if (isRunning) {
         console.log('Previous scheduled update still running — skipping this tick.');
         return;
@@ -34,4 +34,4 @@ cron.schedule('0 */4 * * *', async () => {
     }
 });
 
-console.log('Scheduler initialized: Matches will update every 4 hours');
+console.log('Scheduler initialized: Matches will update every 30 minutes');

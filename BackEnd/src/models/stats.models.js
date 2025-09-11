@@ -1,17 +1,12 @@
 import mongoose from 'mongoose';
 
 export const statsSchema = new mongoose.Schema({
-    scope: {
-        type: String,
-        enum: ["Career", "Season"],
-        default: "Career"
-    },
     season: {
         type: String
     },
     matchType: {
         type: String,
-        enum: ["IPL", "ODI", "Test", "T20"],
+        enum: ["IPL", "ODI", "Test", "T20I", "T20", "Other"],
         required: true
     },
     fn: {
@@ -24,15 +19,14 @@ export const statsSchema = new mongoose.Schema({
         required: true
     },
     value: {
+        type: String,
+        default: "0"
+    },
+    numericValue: {
         type: Number,
         default: 0
     },
     unit: {
         type: String
     }
-<<<<<<< HEAD
 }, {_id: false});
-=======
-}, {_id: false});
-
->>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b

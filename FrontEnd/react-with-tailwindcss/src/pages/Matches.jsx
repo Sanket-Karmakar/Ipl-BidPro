@@ -1,33 +1,66 @@
+// src/pages/Matches.jsx
 import { useEffect, useState } from "react";
-import MatchCard from "../Components/MatchCard"
+import MatchCard from "../components/MatchCard";
 
-const Matches = () => {
+function Matches() {
+  const [activeTab, setActiveTab] = useState("upcoming");
   const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/matches/upcoming")
+    let endpoint = "";
+    if (activeTab === "upcoming") endpoint = "/api/matches/upcoming";
+    if (activeTab === "ongoing") endpoint = "/api/matches/ongoing";
+    if (activeTab === "completed") endpoint = "/api/matches/completed";
+
+    setLoading(true);
+    fetch(`http://localhost:5001${endpoint}`)
       .then((res) => res.json())
-      .then((data) => setMatches(data || [])) // API gives [] directly
-      .catch((err) => console.error("Error fetching matches:", err));
-  }, []);
+      .then((data) => {
+        // Some APIs return [] others return {}
+        setMatches(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-gray-100 px-6 py-10">
-      <h1 className="text-2xl font-bold text-gray-800 text-center mb-8">
-        Upcoming Matches
-      </h1>
-
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-items-center">
-        {matches.length > 0 ? (
-          matches.map((match) => (
-            <MatchCard key={match.matchId} match={match} />
-          ))
-        ) : (
-          <p className="text-gray-600 text-center">No matches available</p>
-        )}
+    <div className="p-4">
+      {/* Tabs */}
+      <div className="flex justify-around border-b mb-4">
+        {["upcoming", "ongoing", "completed"].map((tab) => (
+          <button
+            key={tab}
+            className={`px-4 py-2 font-medium ${
+              activeTab === tab
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab.toUpperCase()}
+          </button>
+        ))}
       </div>
+
+      {/* Content */}
+      {loading ? (
+        <p className="text-center text-gray-500">Loading matches...</p>
+      ) : matches.length === 0 ? (
+        <p className="text-center text-gray-500 mt-8 font-bold">
+          {activeTab === "ongoing"
+            ? "No ongoing matches are live right now ⚡"
+            : "No matches available"}
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {matches.map((match) => (
+            <MatchCard key={match._id} match={match} />
+          ))}
+        </div>
+      )}
     </div>
   );
-};
+}
 
 export default Matches;

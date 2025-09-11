@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HamburgerButton from "./HamburgerButton";
 import Sidebar from "./Sidebar";
 import { useState } from "react";
@@ -7,11 +7,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
-  const location = useLocation();
-
-  if (location.pathname === "/login" || location.pathname === "/signup") {
-    return null;
-  }
+  
   return (
     <>
       <header className="w-full bg-black px-6 py-4 flex items-center justify-between shadow-lg">

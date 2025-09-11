@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/pages/Signup.jsx
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
@@ -32,19 +33,20 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-purple-700 to-indigo-800">
       <form
         onSubmit={handleSignup}
-        className="bg-white p-8 rounded-lg shadow-md w-96 space-y-4"
+        className="bg-white p-8 rounded-2xl shadow-2xl w-96 space-y-5"
       >
-        <h2 className="text-2xl font-bold text-center">Create Account</h2>
+        <h2 className="text-3xl font-bold text-center text-purple-800">Create Account</h2>
+
         <input
           type="text"
           placeholder="Full Name"
           value={fullname}
           onChange={(e) => setFullname(e.target.value)}
           required
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         <input
           type="text"
@@ -52,7 +54,7 @@ export default function Signup() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         <input
           type="email"
@@ -60,7 +62,7 @@ export default function Signup() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         <input
           type="password"
@@ -68,15 +70,26 @@ export default function Signup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full border rounded px-3 py-2"
+          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
+
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+          className="w-full bg-purple-700 text-white py-2 rounded-lg font-semibold hover:bg-purple-800 transition"
         >
-          {loading ? "Creating account..." : "Sign Up"}
+          {loading ? "Creating..." : "Sign Up"}
         </button>
+
+        <p className="text-center text-gray-600 text-sm">
+          Already have an account?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            className="text-purple-700 font-semibold cursor-pointer hover:underline"
+          >
+            Login
+          </span>
+        </p>
       </form>
     </div>
   );

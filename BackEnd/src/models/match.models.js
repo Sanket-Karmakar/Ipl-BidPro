@@ -16,9 +16,7 @@ const teamInfoSchema = new mongoose.Schema({
 const matchSchema = new mongoose.Schema({
     matchId: {
         type: String,
-        required: true,
-        unique: true,
-        index: true
+        required: true
     },
     name: { type: String },
     matchType: {
@@ -80,14 +78,26 @@ matchSchema.pre('validate', function (next) {
     next();
 });
 
-
+/**
+ * Virtual category derived from fields for quick filtering on frontend:
+ * - COMPLETED if matchEnded or status COMPLETED
+ * - ONGOING if matchStarted or status ONGOING
+ * - UPCOMING otherwise
+ */
 matchSchema.virtual('category').get(function () {
     if (this.matchEnded || this.status === 'COMPLETED') return 'COMPLETED';
     if (this.matchStarted || this.status === 'ONGOING') return 'ONGOING';
     return 'UPCOMING';
 });
 
-
+/**
+ * Static helper: upsertFromApi(apiObj)
+ *  - Normalizes common fields
+ *  - Performs atomic findOneAndUpdate with upsert:true
+ *  - Returns the saved/updated doc
+ *
+ * Use this everywhere you ingest matches from external APIs.
+ */
 matchSchema.statics.upsertFromApi = async function (apiMatch) {
     const Match = this;
 
