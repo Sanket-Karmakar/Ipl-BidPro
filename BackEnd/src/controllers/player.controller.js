@@ -3,14 +3,19 @@ import { Player } from "../models/player.models.js";
 
 export async function fetchPlayerStatsController(req, res) {
   try {
-    const playerName = req.query.name;
+    // ✅ Accept name from either body or query
+    const playerName = req.body.name || req.query.name;
     if (!playerName) {
-      return res.status(400).json({ error: "Player name is required in query param `name`." });
+      return res
+        .status(400)
+        .json({ error: "Player name is required in body or query param `name`." });
     }
 
     const player = await fetchAndStorePlayerStats(playerName);
     if (!player) {
-      return res.status(404).json({ error: `No player found for "${playerName}"` });
+      return res
+        .status(404)
+        .json({ error: `No player found for "${playerName}"` });
     }
 
     res.json(player);
@@ -34,8 +39,4 @@ export async function getPlayerController(req, res) {
     console.error("❌ Error in getPlayerController:", error.message);
     res.status(500).json({ error: "Failed to get player." });
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e
