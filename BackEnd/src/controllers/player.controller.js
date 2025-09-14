@@ -20,6 +20,7 @@ async function fetchFromCricData(playerName) {
 // GET /api/players/fetch-stats?name=Virat Kohli
 export async function fetchPlayerStatsController(req, res) {
   try {
+<<<<<<< HEAD
     const playerName = req.body.name || req.query.name;
     if (!playerName) {
       return res.status(400).json({
@@ -32,6 +33,21 @@ export async function fetchPlayerStatsController(req, res) {
     let player = await Player.findOne({ name: new RegExp(playerName, "i") });
     if (player) {
       return res.json({ success: true, source: "db", data: player });
+=======
+    // ✅ Accept name from either body or query
+    const playerName = req.body.name || req.query.name;
+    if (!playerName) {
+      return res
+        .status(400)
+        .json({ error: "Player name is required in body or query param `name`." });
+    }
+
+    const player = await fetchAndStorePlayerStats(playerName);
+    if (!player) {
+      return res
+        .status(404)
+        .json({ error: `No player found for "${playerName}"` });
+>>>>>>> 9e219e03b845538a299dbfffb9978743f44048e8
     }
 
     // 2. Not in DB → fetch from CricData
