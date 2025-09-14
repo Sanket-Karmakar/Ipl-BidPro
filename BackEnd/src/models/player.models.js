@@ -18,7 +18,7 @@ const playerSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["Batsman", "Bowler", "All-Rounder", "Wicket-Keeper"]
+        required: true
     },
     battingStyle: {
         type: String
@@ -47,7 +47,3 @@ playerSchema.index({ "stats.matchType": 1 });
 playerSchema.index({ "stats.fn": 1 });
 
 export const Player = mongoose.model("Player", playerSchema);
-<<<<<<< HEAD
-
-=======
->>>>>>> 9e219e03b845538a299dbfffb9978743f44048e8

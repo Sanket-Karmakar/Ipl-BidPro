@@ -1,79 +1,37 @@
 // src/controllers/player.controller.js
 import { Player } from "../models/player.models.js";
-import axios from "axios";
-
-// ------------------ Helper ------------------
-async function fetchFromCricData(playerName) {
-  const { data } = await axios.get(`${process.env.CRICAPI_BASE_URL}/players`, {
-    params: {
-      apikey: process.env.CRIC_API_KEY,
-      search: playerName,
-    },
-  });
-
-  // CricData returns players in `data.data`
-  return data?.data?.length ? data.data[0] : null;
-}
+import { fetchAndStorePlayerStats } from "../services/playerStats.service.js";
 
 // ------------------ Controllers ------------------
 
-// GET /api/players/fetch-stats?name=Virat Kohli
+// POST /api/players/fetch-stats
 export async function fetchPlayerStatsController(req, res) {
   try {
-<<<<<<< HEAD
-    const playerName = req.body.name || req.query.name;
-    if (!playerName) {
-      return res.status(400).json({
-        success: false,
-        message: "Player name is required in query ?name= or body {name}",
-      });
-    }
-
-    // 1. Try from DB
-    let player = await Player.findOne({ name: new RegExp(playerName, "i") });
-    if (player) {
-      return res.json({ success: true, source: "db", data: player });
-=======
     // ✅ Accept name from either body or query
     const playerName = req.body.name || req.query.name;
     if (!playerName) {
-      return res
-        .status(400)
-        .json({ error: "Player name is required in body or query param `name`." });
-    }
-
-    const player = await fetchAndStorePlayerStats(playerName);
-    if (!player) {
-      return res
-        .status(404)
-        .json({ error: `No player found for "${playerName}"` });
->>>>>>> 9e219e03b845538a299dbfffb9978743f44048e8
-    }
-
-    // 2. Not in DB → fetch from CricData
-    const externalPlayer = await fetchFromCricData(playerName);
-    if (!externalPlayer) {
-      return res.status(404).json({
-        success: false,
-        message: `No player found for "${playerName}"`,
+      return res.status(400).json({
+        error: "Player name is required in body or query param `name`.",
       });
     }
 
-    // 3. Save to DB
-    player = await Player.create({
-      playerId: externalPlayer.id,
-      name: externalPlayer.name,
-      country: externalPlayer.country,
-      role: externalPlayer.role,
-      battingStyle: externalPlayer.battingStyle,
-      bowlingStyle: externalPlayer.bowlingStyle,
-      playerImg: externalPlayer.img,
-    });
+    // ✅ This already fetches from CricAPI + upserts into DB
+    const player = await fetchAndStorePlayerStats(playerName);
 
-    return res.json({ success: true, source: "api", data: player });
+    if (!player) {
+      return res.status(404).json({
+        error: `No player found for "${playerName}"`,
+      });
+    }
+
+    return res.json({ success: true, source: "db/api", data: player });
   } catch (error) {
-    console.error("❌ Error in fetchPlayerStatsController:", error.message);
-    res.status(500).json({ success: false, message: "Failed to fetch player stats." });
+    console.error("❌ Error in fetchPlayerStatsController:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch player stats.",
+      details: error.message,
+    });
   }
 }
 
@@ -84,12 +42,17 @@ export async function getPlayerController(req, res) {
     const player = await Player.findOne({ playerId });
 
     if (!player) {
-      return res.status(404).json({ success: false, message: "Player not found in DB." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Player not found in DB." });
     }
 
     res.json({ success: true, data: player });
   } catch (error) {
     console.error("❌ Error in getPlayerController:", error.message);
-    res.status(500).json({ success: false, message: "Failed to get player." });
+    res.status(500).json({
+      success: false,
+      message: "Failed to get player.",
+    });
   }
 }
