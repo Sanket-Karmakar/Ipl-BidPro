@@ -1,6 +1,6 @@
 export function normalizeCricApiResponse(cricApiResponse) {
     if (!cricApiResponse || !cricApiResponse.id) {
-        console.error("Invalid CricAPI response data provided for normalization.");
+        console.error("❌ Invalid CricAPI response data provided for normalization.");
         return null;
     }
 
@@ -66,9 +66,9 @@ export function normalizeCricApiResponse(cricApiResponse) {
 
     const normalizedPlayer = {
         playerId: cricApiResponse.id,
-        name: cricApiResponse.name,
+        name: cricApiResponse.name || "Unknown",
         dateOfBirth: cricApiResponse.dateOfBirth ? new Date(cricApiResponse.dateOfBirth) : null,
-        role: cricApiResponse.role,
+        role: cricApiResponse.role || "",
         battingStyle: cricApiResponse.battingStyle || "",
         bowlingStyle: cricApiResponse.bowlingStyle || "",
         placeOfBirth: cricApiResponse.placeOfBirth || "",
@@ -79,7 +79,13 @@ export function normalizeCricApiResponse(cricApiResponse) {
 
     const processedStats = new Set();
 
-    (cricApiResponse.stats || []).forEach(apiStat => {
+    // --- Defensive check for missing stats ---
+    if (!Array.isArray(cricApiResponse.stats) || cricApiResponse.stats.length === 0) {
+        console.warn(`⚠️ No stats available for player: ${cricApiResponse.name || "Unknown"}`);
+        return normalizedPlayer;
+    }
+
+    cricApiResponse.stats.forEach(apiStat => {
         // --- Clean input ---
         const fn = apiStat.fn ? apiStat.fn.trim().toLowerCase() : "";
         const rawMatchType = apiStat.matchtype ? apiStat.matchtype.trim().toLowerCase() : "";
@@ -123,8 +129,4 @@ export function normalizeCricApiResponse(cricApiResponse) {
     });
 
     return normalizedPlayer;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e

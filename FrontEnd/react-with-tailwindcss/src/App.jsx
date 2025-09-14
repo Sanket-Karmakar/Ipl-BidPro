@@ -6,7 +6,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Matches from "./pages/Matches";
+import Analysis from "./pages/Analysis";
 import MatchesPages from "./pages/MatchesPages";
+import PlayerProfile from "./pages/PlayerProfile";
 import BidPro from "./pages/BidPro";
 import Footer from "./components/Footer"; 
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -26,6 +28,8 @@ function App() {
         <Route path="/signup" element={user ? <Navigate to="/home" /> : <Signup />} />
         <Route path="/login" element={user ? <Navigate to="/home" /> : <Login />} />
           <Route path="/bidpro" element={<BidPro />} />
+          <Route path="/analysis" element={<Analysis />} />
+          <Route path="/player/:id" element={<PlayerProfile />} />
 
         {/* Protected app routes */}
         <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />

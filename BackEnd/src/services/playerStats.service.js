@@ -1,6 +1,11 @@
+import dotenv from 'dotenv';
 import axios from "axios";
 import { Player } from "../models/player.models.js";
 import { normalizeCricApiResponse } from "../utils/normalizeStats.js";
+
+dotenv.config()
+
+console.log("DEBUG ENV CRIC_API_KEY =", process.env.CRIC_API_KEY);
 
 // --- Configuration (from .env) ---
 const CRICAPI_BASE_URL = process.env.CRICAPI_BASE_URL || "https://api.cricapi.com/v1";
@@ -14,40 +19,46 @@ export async function fetchAndStorePlayerStats(playerName) {
 
     try {
         // --- Step 1: Search player by name to get CricAPI ID ---
-        const searchUrl = `${CRICAPI_BASE_URL}/players?apikey=${CRICAPI_KEY}&offset=0&search=${encodeURIComponent(playerName)}`;
-<<<<<<< HEAD
-        
-=======
-        const searchResponse = await axios.get(searchUrl);
+        const searchUrl = `${CRICAPI_BASE_URL}/players?apikey=${CRICAPI_KEY}&offset=0&search=${playerName.trim()}`;
+        console.log("🟢 DEBUG: Search URL:", searchUrl);
 
-        if (
-            searchResponse.data.status !== "success" ||
-            !Array.isArray(searchResponse.data.data) ||
-            searchResponse.data.data.length === 0
-        ) {
-            console.warn(`⚠️ No player found for "${playerName}" or API search failed.`);
+        const searchResponse = await axios.get(searchUrl);
+        console.log("📥 DEBUG: CricAPI search response:", JSON.stringify(searchResponse.data, null, 2));
+
+        const { status, data: resultData, reason } = searchResponse.data;
+
+        if (status !== "success" || !resultData || (Array.isArray(resultData) && resultData.length === 0)) {
+            console.warn(`⚠️ Search failed for "${playerName}" → reason: ${reason || "no data"}`);
             return null;
         }
->>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e
 
-        const cricApiPlayerId = searchResponse.data.data[0].id;
+        // Handle both array and object responses
+        const playerEntry = Array.isArray(resultData) ? resultData[0] : resultData;
+        const cricApiPlayerId = playerEntry.id;
+
         console.log(`✅ Found CricAPI ID for ${playerName}: ${cricApiPlayerId}`);
 
         // --- Step 2: Fetch detailed player info ---
-        const playerInfoUrl = `${CRICAPI_BASE_URL}/players_info?apikey=${CRICAPI_KEY}&id=${cricApiPlayerId}`;
-        const playerInfoResponse = await axios.get(playerInfoUrl);
+        const playerInfoUrl = `${CRICAPI_BASE_URL}/players_info?apikey=${CRICAPI_KEY}&offset=0&id=${cricApiPlayerId}`;
+        console.log("🟢 DEBUG: Player Info URL:", playerInfoUrl);
 
-        if (playerInfoResponse.data.status !== "success" || !playerInfoResponse.data.data) {
-            console.error(`Failed to fetch player info for ID ${cricApiPlayerId}`, playerInfoResponse.data);
+        const playerInfoResponse = await axios.get(playerInfoUrl);
+        console.log("📥 DEBUG: CricAPI player info response:", JSON.stringify(playerInfoResponse.data, null, 2));
+
+        const { status: infoStatus, data: infoData, reason: infoReason } = playerInfoResponse.data;
+
+        if (infoStatus !== "success" || !infoData) {
+            console.error(`❌ Failed to fetch player info for ID ${cricApiPlayerId} → reason: ${infoReason || "no data"}`);
             return null;
         }
 
-        const rawPlayerInfo = playerInfoResponse.data.data;
+        // Handle both array and object formats
+        const rawPlayerInfo = Array.isArray(infoData) ? infoData[0] : infoData;
 
         // --- Step 3: Normalize stats ---
         const normalizedPlayerData = normalizeCricApiResponse(rawPlayerInfo);
         if (!normalizedPlayerData) {
-            console.error(`Normalization failed for player: ${playerName}`);
+            console.error(`❌ Normalization failed for player: ${playerName}`);
             return null;
         }
 
@@ -58,19 +69,21 @@ export async function fetchAndStorePlayerStats(playerName) {
             { new: true, upsert: true, runValidators: true }
         );
 
-        console.log(`Successfully saved/updated player: ${player.name}`);
+        console.log(`🎉 Successfully saved/updated player: ${player.name}`);
         return player;
 
     } catch (error) {
-        console.error(`Error fetching/storing player "${playerName}":`, error.message);
+        console.error(`💥 Error fetching/storing player "${playerName}":`, error.message);
+
         if (error.response) {
-            console.error("CricAPI Error Response Data:", error.response.data);
-            console.error("CricAPI Error Response Status:", error.response.status);
+            console.error("🛑 CricAPI Error Response Data:", error.response.data);
+            console.error("🛑 CricAPI Error Response Status:", error.response.status);
+        } else if (error.request) {
+            console.error("🛑 CricAPI no response received:", error.request);
+        } else {
+            console.error("🛑 CricAPI setup error:", error.message);
         }
+
         return null;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 8970d6398f5b235d62f1f37d4f78b60eb448430e
