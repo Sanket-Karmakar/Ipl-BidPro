@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Player } from './player.models.js';
 
 const scoreSchema = new mongoose.Schema({
     r: { type: Number, min: 0 },
@@ -12,6 +13,40 @@ const teamInfoSchema = new mongoose.Schema({
     shortname: { type: String },
     img: { type: String }
 }, { _id: false });
+
+const squadPlayerSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String
+    },
+    battingStyle: {
+        type: String
+    },
+    bowlingStyle: {
+        type: String
+    },
+    country: {
+        type: String
+    },
+    playerImg: {
+        type: String
+    }
+}, { id: false });
+
+const squadSchema = new mongoose.Schema({
+    teamName: {
+        type: String,
+        required: true
+    },
+    players: [squadPlayerSchema] 
+}, { id: false });
 
 const matchSchema = new mongoose.Schema({
     matchId: {
@@ -41,6 +76,7 @@ const matchSchema = new mongoose.Schema({
     series_id: { type: String },
     fantasyEnabled: { type: Boolean, default: false },
     hasSquad: { type: Boolean, default: false },
+    squads: [ squadSchema ],
     matchStarted: { type: Boolean, default: false },
     matchEnded: { type: Boolean, default: false }
 }, { timestamps: true });
