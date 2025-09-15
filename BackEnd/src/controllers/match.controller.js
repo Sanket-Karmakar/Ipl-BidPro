@@ -42,7 +42,7 @@ export const getAllMatches = async (req, res) => {
 
 export const getMatchById = async (req, res) => {
     try {
-        const match = await Match.findById(req.params.id).lean();
+        const match = await Match.findOne({ matchId: req.params.id }).lean();
         if (!match) {
             return res.status(404).json({ message: `Match not found` });
         }

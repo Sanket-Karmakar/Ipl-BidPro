@@ -1,37 +1,65 @@
-import cron from 'node-cron';
-import { updateMatches } from '../services/matchService.js';
+import cron from "node-cron";
+import { updateMatches } from "../services/matchService.js";
+import { refreshSquads } from "../services/squadsService.js";
 
-let isRunning = false;
+let isRunningMatches = false;
+let isRunningSquads = false;
 
+// Helper for timestamped logs
+const log = (msg) => console.log(`[${new Date().toISOString()}] ${msg}`);
+
+// 1. Initial match update
 (async () => {
-    try {
-        console.log(`Running initial match update...`);
-        if (!isRunning) {
-            isRunning = true;
-            await updateMatches();
-            isRunning = false;
-        }
-    } catch (e) {
-        console.error('Initial update failed:', e);
-        isRunning = false;
-    }
+  log("Running initial match update...");
+  if (isRunningMatches) {
+    log("Initial match update skipped (already running).");
+    return;
+  }
+  try {
+    isRunningMatches = true;
+    await updateMatches();
+    log("✅ Initial match update completed.");
+  } catch (e) {
+    console.error("❌ Initial update failed:", e);
+  } finally {
+    isRunningMatches = false;
+  }
 })();
 
-// schedule every 30 minutes; guard against overlap with isRunning flag
-cron.schedule('*/30 * * * *', async () => {
-    if (isRunning) {
-        console.log('Previous scheduled update still running — skipping this tick.');
-        return;
-    }
-    try {
-        console.log('Running scheduled match update...');
-        isRunning = true;
-        await updateMatches();
-    } catch (err) {
-        console.error('Scheduled update error:', err);
-    } finally {
-        isRunning = false;
-    }
+// 2. Matches: every 30 minutes
+cron.schedule("*/30 * * * *", async () => {
+  if (isRunningMatches) {
+    log("Previous scheduled match update still running — skipping.");
+    return;
+  }
+  try {
+    log("Running scheduled match update...");
+    isRunningMatches = true;
+    await updateMatches();
+    log("✅ Scheduled match update completed.");
+  } catch (err) {
+    console.error("❌ Scheduled match update error:", err);
+  } finally {
+    isRunningMatches = false;
+  }
 });
 
-console.log('Scheduler initialized: Matches will update every 30 minutes');
+// 3. Squads: every 6 hours
+cron.schedule("0 * * * *", async () => {
+  if (isRunningSquads) {
+    log("Previous scheduled squad update still running — skipping.");
+    return;
+  }
+  try {
+    log("Running scheduled squad update...");
+    isRunningSquads = true;
+    await refreshSquads();
+    log("✅ Scheduled squad update completed.");
+  } catch (err) {
+    console.error("❌ Scheduled squad update error:", err);
+  } finally {
+    isRunningSquads = false;
+  }
+});
+
+log("Scheduler initialized: Matches update every 30m, Squads update every 6h");
