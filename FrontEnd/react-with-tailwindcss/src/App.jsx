@@ -9,6 +9,9 @@ import Matches from "./pages/Matches";
 import Analysis from "./pages/Analysis";
 import MatchesPages from "./pages/MatchesPages";
 import PlayerProfile from "./pages/PlayerProfile";
+import ContestPage from "./pages/ContestPage";
+import CreateTeamPage from "./pages/CreateTeamPage";
+import CVCSelectionPage from "./pages/CVCSelectionPage";
 import BidPro from "./pages/BidPro";
 import Footer from "./components/Footer"; 
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -30,6 +33,9 @@ function App() {
           <Route path="/bidpro" element={<BidPro />} />
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/player/:id" element={<PlayerProfile />} />
+          <Route path="/matches/:matchId/contests" element={<ContestPage />} />
+          <Route path="/matches/:matchId/create-team" element={<CreateTeamPage />} /> 
+          <Route path="/matches/:matchId/select-cvc" element={<CVCSelectionPage />} />
 
         {/* Protected app routes */}
         <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />

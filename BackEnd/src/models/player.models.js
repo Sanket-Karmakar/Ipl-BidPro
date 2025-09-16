@@ -47,3 +47,5 @@ playerSchema.index({ "stats.matchType": 1 });
 playerSchema.index({ "stats.fn": 1 });
 
 export const Player = mongoose.model("Player", playerSchema);
+
+

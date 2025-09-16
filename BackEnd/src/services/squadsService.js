@@ -1,15 +1,7 @@
-// src/services/squadsService.js
-
 import axios from "axios";
 import { Match } from "../models/match.models.js";
 
-/**
- * Get squads for a match:
- * - if they exist in DB, return them (unless forceRefresh = true)
- * - otherwise fetch from CricAPI, save, and return
- */
 export const getOrFetchSquads = async (matchId, forceRefresh = false) => {
-  // 1. Check DB (skip if forceRefresh true)
   if (!forceRefresh) {
     const match = await Match.findOne(
       { matchId },
@@ -64,12 +56,6 @@ export const getOrFetchSquads = async (matchId, forceRefresh = false) => {
   }
 };
 
-/**
- * Refresh squads for all matches that:
- * - already have squads
- * - are not ended
- * Runs via scheduler (e.g. every 6h)
- */
 export const refreshSquads = async () => {
   const matches = await Match.find(
     { hasSquad: true, matchEnded: false },

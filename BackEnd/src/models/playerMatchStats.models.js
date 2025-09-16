@@ -96,7 +96,4 @@ userSchema.methods.toJSON = function() {
 const User = mongoose.model("User", userSchema);
 
 export default User;
-<<<<<<< HEAD
 
-=======
->>>>>>> 9e219e03b845538a299dbfffb9978743f44048e8

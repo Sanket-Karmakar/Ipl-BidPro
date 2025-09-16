@@ -1,9 +1,28 @@
-// src/components/MatchCard.jsx
+import { useNavigate } from "react-router-dom";
+
 function MatchCard({ match }) {
-  const { teamInfo, name, venue, status, matchEnded, score } = match;
+  const { teamInfo, name, venue, status, matchEnded, score, dateTimeGMT, matchId } = match;
+  const navigate = useNavigate();
+
+  // Format date & time
+  const matchDate = new Date(dateTimeGMT);
+  const localDate = matchDate.toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const localTime = matchDate.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 
   return (
-    <div className="border rounded-xl shadow-md p-4 bg-white hover:shadow-lg transition">
+    <div
+      onClick={() => navigate(`/matches/${matchId}/contests`)} // 👈 navigate to contests
+      className="cursor-pointer border rounded-xl shadow-md p-4 bg-white hover:shadow-lg transition"
+    >
       {/* Teams */}
       <div className="flex items-center justify-between">
         {teamInfo?.map((team, idx) => (
@@ -21,8 +40,11 @@ function MatchCard({ match }) {
       {/* Match Name */}
       <p className="mt-3 text-center text-gray-700 text-sm font-medium">{name}</p>
 
-      {/* Venue */}
-      <p className="text-xs text-gray-500 text-center">{venue}</p>
+      {/* Date + Venue */}
+      <p className="text-xs text-gray-500 text-center">
+        📅 {localDate} • ⏰ {localTime}
+      </p>
+      <p className="text-xs text-gray-500 text-center">📍 {venue}</p>
 
       {/* Completed Match → show result + score */}
       {matchEnded ? (
