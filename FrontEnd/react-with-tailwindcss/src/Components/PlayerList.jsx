@@ -1,22 +1,15 @@
 // src/components/PlayerList.jsx
 import { useState } from "react";
+import { categorizeRole } from "../utils/roleUtils";
 
 export default function PlayerList({ players, selectedPlayers, toggleSelect }) {
   const [activeRole, setActiveRole] = useState("WK");
-
-  const categorizeRole = (role = "") => {
-    role = role.toLowerCase();
-    if (role.includes("wk")) return "WK";
-    if (role.includes("bat")) return "BAT";
-    if (role.includes("allrounder") || role.includes("ar")) return "AR";
-    if (role.includes("bowl")) return "BOWL";
-    return "Other";
-  };
 
   const groupedPlayers = { WK: [], BAT: [], AR: [], BOWL: [] };
   players.forEach((p) => {
     const cat = categorizeRole(p.role);
     if (groupedPlayers[cat]) groupedPlayers[cat].push(p);
+    else groupedPlayers.BAT.push(p); // fallback
   });
 
   return (

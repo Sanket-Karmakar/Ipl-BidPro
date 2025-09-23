@@ -1,11 +1,20 @@
 // src/pages/Matches.jsx
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import MatchCard from "../components/MatchCard";
 
 function Matches() {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+
+  // ✅ Pick default tab from navigation (if provided)
+  useEffect(() => {
+    if (location.state?.defaultTab) {
+      setActiveTab(location.state.defaultTab);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     let endpoint = "";
@@ -17,7 +26,6 @@ function Matches() {
     fetch(`http://localhost:5001${endpoint}`)
       .then((res) => res.json())
       .then((data) => {
-        // Some APIs return [] others return {}
         setMatches(Array.isArray(data) ? data : []);
       })
       .catch((err) => console.error(err))

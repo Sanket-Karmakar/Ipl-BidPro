@@ -20,8 +20,11 @@ function MatchCard({ match }) {
 
   return (
     <div
-      onClick={() => navigate(`/matches/${matchId}/contests`)} // 👈 navigate to contests
-      className="cursor-pointer border rounded-xl shadow-md p-4 bg-white hover:shadow-lg transition"
+      onClick={() =>
+  navigate(`/matches/${matchId}/contests`, {
+    state: { status, matchEnded },
+  })
+}
     >
       {/* Teams */}
       <div className="flex items-center justify-between">

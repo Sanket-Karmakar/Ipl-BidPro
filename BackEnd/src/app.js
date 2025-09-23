@@ -8,6 +8,7 @@ import playerRoutes from './routes/player.routes.js';
 import matchRoutes from './routes/match.routes.js';
 import squadsRoute from './routes/squad.routes.js';
 import connectDB from './db/index.js';
+import path from "path";
 import './jobs/scheduler.js';
 
 // Load environment variables
@@ -47,9 +48,13 @@ app.use('/api/matches', matchRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api', squadsRoute);
 
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Not found" });
 });
+
+
 
 
 // Connect to DB and start server

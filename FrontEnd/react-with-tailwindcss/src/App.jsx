@@ -12,41 +12,58 @@ import PlayerProfile from "./pages/PlayerProfile";
 import ContestPage from "./pages/ContestPage";
 import CreateTeamPage from "./pages/CreateTeamPage";
 import CVCSelectionPage from "./pages/CVCSelectionPage";
+import TeamPreviewPage from "./pages/TeamPreviewPage";
+import ViewTeamPage from "./pages/ViewTeamPage";
 import BidPro from "./pages/BidPro";
 import Footer from "./components/Footer"; 
 import ProtectedRoute from "./Components/ProtectedRoute";
 import { useAuth } from "./context/UserContext";
 
 function App() {
-  const { user } = useAuth(); // check if user is logged in
+  const { user } = useAuth();
 
   return (
     <Router>
-      <Header />
-      <Routes>
-        {/* Default route → redirect based on auth */}
-        <Route path="/" element={user ? <Navigate to="/home" /> : <Navigate to="/signup" />} />
+      <div className="flex flex-col min-h-screen">
+        {/* Fixed Header */}
+        <Header />
 
-        {/* Auth routes */}
-        <Route path="/signup" element={user ? <Navigate to="/home" /> : <Signup />} />
-        <Route path="/login" element={user ? <Navigate to="/home" /> : <Login />} />
-          <Route path="/bidpro" element={<BidPro />} />
-          <Route path="/analysis" element={<Analysis />} />
-          <Route path="/player/:id" element={<PlayerProfile />} />
-          <Route path="/matches/:matchId/contests" element={<ContestPage />} />
-          <Route path="/matches/:matchId/create-team" element={<CreateTeamPage />} /> 
-          <Route path="/matches/:matchId/select-cvc" element={<CVCSelectionPage />} />
+        {/* Main Content → push below header */}
+        <main className="flex-1 pt-16 bg-gray-50">
+          <Routes>
+            {/* Default route */}
+            <Route path="/" element={user ? <Navigate to="/home" /> : <Navigate to="/signup" />} />
 
-        {/* Protected app routes */}
-        <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/matches" element={user ? <Matches /> : <Navigate to="/login" />} />
-        <Route path="/matches/:id" element={user ? <MatchesPages /> : <Navigate to="/login" />} />
+            {/* Auth */}
+            <Route path="/signup" element={user ? <Navigate to="/home" /> : <Signup />} />
+            <Route path="/login" element={user ? <Navigate to="/home" /> : <Login />} />
 
-        <Route element={<ProtectedRoute />}>
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-      </Routes>
-      <Footer />
+            {/* Public */}
+            <Route path="/bidpro" element={<BidPro />} />
+            <Route path="/analysis" element={<Analysis />} />
+            <Route path="/player/:id" element={<PlayerProfile />} />
+
+            {/* Matches + Contests */}
+            <Route path="/matches/:matchId/contests" element={<ContestPage />} />
+            <Route path="/matches/:matchId/create-team" element={<CreateTeamPage />} /> 
+            <Route path="/matches/:matchId/select-cvc" element={<CVCSelectionPage />} />
+            <Route path="/matches/:matchId/teams/:teamId" element={<TeamPreviewPage />} />
+            <Route path="/matches/:matchId/view-team/:teamIndex" element={<ViewTeamPage />} />
+
+            {/* Protected */}
+            <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/matches" element={user ? <Matches /> : <Navigate to="/login" />} />
+            <Route path="/matches/:id" element={user ? <MatchesPages /> : <Navigate to="/login" />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+          </Routes>
+        </main>
+
+        {/* Footer */}
+        <Footer />
+      </div>
     </Router>
   );
 }
