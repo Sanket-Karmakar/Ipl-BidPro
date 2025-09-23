@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SavedTeamModal from "../Components/SavedTeamModal";
+import SavedTeamModal from "../Components/SavedTeamModal.jsx";
 
 export default function CVCSelectionPage() {
   const navigate = useNavigate();
