@@ -7,7 +7,7 @@ import userRoutes from './routes/user.routes.js';
 import playerRoutes from './routes/player.routes.js';
 import matchRoutes from './routes/match.routes.js';
 import squadsRoute from './routes/squad.routes.js';
-import contestRoutes from './routes/contestRoutes.js';   // ✅ contest routes
+import contestRoutes from './routes/contest.routes.js';   // ✅ contest routes
 import connectDB from './db/index.js';
 import path from "path";
 import './jobs/scheduler.js';

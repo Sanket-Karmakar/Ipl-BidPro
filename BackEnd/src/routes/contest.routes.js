@@ -1,13 +1,13 @@
 // routes/contest.routes.js
 import express from "express";
-import { joinContest } from "../controllers/contestController.js";
-import { endContest } from "../controllers/contestEndController.js";
-import { authMiddleware } from "../middleware/authMiddleware.js";
-import { getLeaderboard } from "../controllers/contestLeaderboardController.js";
+import { joinContest } from "../controllers/contest.controller.js";
+import { endContest } from "../controllers/contestEnd.controller.js";
+import { verifyJWT } from "../middlewares/auth.middlewares.js";
+import { getLeaderboard } from "../controllers/leaderboard.controller.js";
 
 const router = express.Router();
 
-router.post("/join", authMiddleware, joinContest);
-router.post("/end", endContest); // no auth for now, can restrict to admin later
+router.post("/join", verifyJWT, joinContest);
+router.post("/end", endContest); 
 
 export default router;

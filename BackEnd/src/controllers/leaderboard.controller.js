@@ -1,6 +1,6 @@
 // controllers/contestLeaderboardController.js
-import { Contest } from "../models/contestModel.js";
-import { Team } from "../models/teamModel.js";
+import { Contest } from "../models/contest.models.js";
+import { Team } from "../models/team.models.js";
 
 export const getLeaderboard = async (req, res) => {
   try {

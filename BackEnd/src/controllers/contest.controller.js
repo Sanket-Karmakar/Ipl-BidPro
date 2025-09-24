@@ -1,8 +1,8 @@
 // controllers/contestController.js
-import { Contest } from "../models/contestModel.js";
-import { User } from "../models/userModel.js";
-import { Transaction } from "../models/transactionModel.js";
-import { Team } from "../models/teamModel.js";
+import { Contest } from "../models/contest.models.js";
+import User from "../models/user.models.js";
+import { Transaction } from "../models/transaction.models.js";
+import { Team } from "../models/team.models.js";
 
 export const joinContest = async (req, res) => {
   try {
