@@ -1,19 +1,16 @@
 // src/components/SavedTeamModal.jsx
 import { Dialog } from "@headlessui/react";
+import { categorizeRole } from "../utils/roleUtils";
 
-export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {  // ✅ take onDone as prop
+export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {
   if (!team) return null;
 
-  const { teamName, players, captain, viceCaptain } = team; // ✅ only destructure from team
+  const { teamName, players, captain, viceCaptain } = team;
 
-  // Count by roles
   const counts = players.reduce(
     (acc, p) => {
-      if (p.role.toLowerCase().includes("wk")) acc.WK++;
-      else if (p.role.toLowerCase().includes("bat")) acc.BAT++;
-      else if (p.role.toLowerCase().includes("allrounder") || p.role.toLowerCase().includes("ar"))
-        acc.AR++;
-      else if (p.role.toLowerCase().includes("bowl")) acc.BOWL++;
+      const key = categorizeRole(p.role);
+      acc[key] = (acc[key] || 0) + 1;
       return acc;
     },
     { WK: 0, BAT: 0, AR: 0, BOWL: 0 }
@@ -21,17 +18,13 @@ export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {  // 
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      {/* Overlay */}
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
-
-      {/* Modal */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
           <Dialog.Title className="text-lg font-bold text-gray-800 mb-4">
             Team Saved Successfully 🎉
           </Dialog.Title>
 
-          {/* Team card like Dream11 */}
           <div className="border rounded-lg shadow p-4 bg-gradient-to-r from-green-50 to-white">
             <h2 className="text-base font-semibold mb-2">{teamName}</h2>
 
@@ -43,7 +36,6 @@ export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {  // 
             </div>
 
             <div className="flex items-center justify-center gap-6">
-              {/* Captain */}
               <div className="flex flex-col items-center">
                 <img
                   src={captain?.playerImg || "https://via.placeholder.com/60"}
@@ -54,7 +46,6 @@ export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {  // 
                 <span className="text-[10px] text-blue-600 font-bold">C</span>
               </div>
 
-              {/* Vice Captain */}
               <div className="flex flex-col items-center">
                 <img
                   src={viceCaptain?.playerImg || "https://via.placeholder.com/60"}
@@ -67,7 +58,6 @@ export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {  // 
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="mt-6 flex justify-end gap-3">
             <button
               onClick={onClose}
@@ -76,7 +66,7 @@ export default function SavedTeamModal({ isOpen, onClose, onDone, team }) {  // 
               Close
             </button>
             <button
-              onClick={onDone} // ✅ this will now work
+              onClick={onDone}
               className="bg-blue-600 text-white px-4 py-2 rounded-md"
             >
               Done

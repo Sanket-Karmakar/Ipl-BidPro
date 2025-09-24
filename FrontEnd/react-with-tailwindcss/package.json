@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.8",
+    "@heroicons/react": "^0.0.0-insiders.fa902f4",
     "@tailwindcss/vite": "^4.1.11",
     "framer-motion": "^12.23.6",
     "react": "^19.0.0",

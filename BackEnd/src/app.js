@@ -7,7 +7,9 @@ import userRoutes from './routes/user.routes.js';
 import playerRoutes from './routes/player.routes.js';
 import matchRoutes from './routes/match.routes.js';
 import squadsRoute from './routes/squad.routes.js';
+import contestRoutes from './routes/contestRoutes.js';   // ✅ contest routes
 import connectDB from './db/index.js';
+import path from "path";
 import './jobs/scheduler.js';
 
 // Load environment variables
@@ -30,7 +32,6 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(cookieParser());
 app.use(express.static('public'));
 
-
 // Health check
 app.get('/', (_req, res) => {
   res.send({ status: 'ok', message: 'IPL BidPro backend is running' });
@@ -46,11 +47,15 @@ app.use('/api/users', userRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api', squadsRoute);
+app.use('/api/contests', contestRoutes);   // ✅ contest API base path
 
+// Static uploads
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Not found" });
 });
-
 
 // Connect to DB and start server
 const PORT = process.env.PORT || 5001;
@@ -66,4 +71,3 @@ connectDB()
     console.error('Failed to connect to MongoDB:', err);
     process.exit(1);
   });
-

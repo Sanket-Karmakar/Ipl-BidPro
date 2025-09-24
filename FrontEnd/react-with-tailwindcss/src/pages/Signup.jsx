@@ -7,17 +7,26 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [profileImage, setProfileImage] = useState(null); // ✅ file state
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
+      // ✅ use FormData
+      const formData = new FormData();
+      formData.append("fullname", fullname);
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+      if (profileImage) formData.append("profileImage", profileImage);
+
       const res = await fetch("http://localhost:5001/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullname, username, email, password }),
+        body: formData, // ✅ no headers for multipart
       });
 
       const data = await res.json();
@@ -37,6 +46,7 @@ export default function Signup() {
       <form
         onSubmit={handleSignup}
         className="bg-white p-8 rounded-2xl shadow-2xl w-96 space-y-5"
+        encType="multipart/form-data" // ✅ important for file upload
       >
         <h2 className="text-3xl font-bold text-center text-purple-800">Create Account</h2>
 
@@ -70,6 +80,14 @@ export default function Signup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+
+        {/* ✅ File Upload */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setProfileImage(e.target.files[0])}
           className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
 

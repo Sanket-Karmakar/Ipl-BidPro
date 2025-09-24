@@ -1,96 +1,114 @@
+// src/models/user.models.js
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
-	fullname: {
-		type: String,
-		required: true,
-		trim: true
-	},
-	username: {
-		type: String,
-		required: true,
-		trim: true,
-		unique: true
-	},
-	email: {
-		type: String,
-		required: true,
-		unique: true,
-		lowercase: true,
-		trim: true
-	},
-	password: {
-		type: String,
-		required: true
-	},
-	refreshToken: {
-		type: String
-	},
-	virtualCash: {
-		type: Number, 
-		default: 10000,    				
-		min: 0
-	},
-	profileImage: {
-		type: String,
-		default: ""
-	},
-	matchHistory: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Contest"
-	}],
-	teamHistory: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Team"
-	}],
-	favourites: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Player"
-	}]
-}, { timestamps: true });
+  fullname: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  refreshToken: {
+    type: String
+  },
+  virtualCash: {
+    type: Number, 
+    default: 10000,
+    min: 0
+  },
+  profileImage: {
+    type: String,
+    default: ""
+  },
+  matchHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Contest"
+  }],
+  teamHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Team"
+  }],
+  favourites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Player"
+  }]
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
 
+// hash password before save
 userSchema.pre("save", async function(next) {
-	if (!this.isModified("password")){
-		return next();
-	}
-	this.password = await bcrypt.hash(this.password, 10);
-	next();
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
 userSchema.methods.isPasswordCorrect = function (plain) {
-  	return bcrypt.compare(plain, this.password);
+  return bcrypt.compare(plain, this.password);
 };
 
 userSchema.methods.generateAccessToken = function() {
-	return jwt.sign({
-		_id: this._id,
-		email: this.email,
-		fullname: this.fullname,
-		username: this.username
-	},
-	process.env.ACCESS_TOKEN_SECRET,
-	{
-		expiresIn: "7d"
-	});
+  return jwt.sign({
+    _id: this._id,
+    email: this.email,
+    fullname: this.fullname,
+    username: this.username
+  },
+  process.env.ACCESS_TOKEN_SECRET,
+  {
+    expiresIn: "7d"
+  });
 };
 
 userSchema.methods.generateRefreshToken = function () {
-  	return jwt.sign({ 
-		_id: this._id 
-	}, 
-	process.env.REFRESH_TOKEN_SECRET, 
-	{ 
-		expiresIn: "30d" 
-	});
+  return jwt.sign({
+    _id: this._id
+  },
+  process.env.REFRESH_TOKEN_SECRET,
+  {
+    expiresIn: "30d"
+  });
 };
 
+// virtual to return full image URL (if needed)
+userSchema.virtual('profileImageUrl').get(function () {
+  if (!this.profileImage) return "";
+  if (this.profileImage.startsWith("http")) return this.profileImage;
+
+  // prefer explicit SERVER_URL env var, fall back to localhost + PORT
+  const base =
+    process.env.SERVER_URL ||
+    `http://localhost:${process.env.PORT || 5001}`;
+  // ensure leading slash
+  return this.profileImage.startsWith("/") ? `${base}${this.profileImage}` : `${base}/${this.profileImage}`;
+});
+
+// remove sensitive fields when converting to JSON
 userSchema.methods.toJSON = function() {
-	const obj = this.toObject();
-	delete obj.password;
-	delete obj.refreshToken;
-	return obj;
+  const obj = this.toObject();
+  delete obj.password;
+  delete obj.refreshToken;
+  return obj;
 };
 
 const User = mongoose.model("User", userSchema);

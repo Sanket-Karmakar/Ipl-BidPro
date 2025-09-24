@@ -1,5 +1,5 @@
 // src/components/TeamCard.jsx
-export default function TeamCard({ team, onEdit }) {
+export default function TeamCard({ team, onEdit, onView, onRemove }) {
   const { teamName, players, captain, viceCaptain } = team;
 
   // Count roles
@@ -20,9 +20,24 @@ export default function TeamCard({ team, onEdit }) {
       {/* Team Header */}
       <div className="flex justify-between items-center mb-3">
         <h2 className="font-bold">{teamName}</h2>
-        <button onClick={onEdit} className="text-blue-600 text-sm font-semibold">
-          ✏️ Edit
-        </button>
+        <div className="flex gap-3">
+          <button onClick={onView} className="text-blue-600 text-sm font-semibold">
+            👀 View
+          </button>
+          <button onClick={onEdit} className="text-yellow-600 text-sm font-semibold">
+            ✏️ Edit
+          </button>
+          <button
+            onClick={() => {
+              if (window.confirm("Are you sure you want to remove this team?")) {
+                onRemove();
+              }
+            }}
+            className="text-red-600 text-sm font-semibold"
+          >
+            ❌ Remove
+          </button>
+        </div>
       </div>
 
       {/* Counts */}

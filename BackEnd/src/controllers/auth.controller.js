@@ -16,7 +16,19 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists with this email or username");
   }
 
-  const user = await User.create({ fullname, username, email, password });
+  // ✅ profile image from multer
+  let profileImage = "";
+  if (req.file) {
+    profileImage = `/uploads/${req.file.filename}`; // static path
+  }
+
+  const user = await User.create({
+    fullname,
+    username,
+    email,
+    password,
+    profileImage, // ✅ save image
+  });
 
   const userData = user.toObject();
   delete userData.password;
