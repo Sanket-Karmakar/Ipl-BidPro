@@ -15,4 +15,9 @@ router.get("/my-contests", protect, getUserContests);
 router.post("/join", protect, joinContest);
 router.post("/end", endContest);
 
+router.get("/test", (req, res) => {
+  res.json({ message: "Contest route is working!" });
+});
+
+console.log("Contest routes loaded!");
 export default router;

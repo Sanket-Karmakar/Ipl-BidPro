@@ -14,6 +14,7 @@ import CreateTeamPage from "./pages/CreateTeamPage";
 import CVCSelectionPage from "./pages/CVCSelectionPage";
 import TeamPreviewPage from "./pages/TeamPreviewPage";
 import ViewTeamPage from "./pages/ViewTeamPage";
+import JoinContestPage from "./pages/JoinContestPage";
 import BidPro from "./pages/BidPro";
 import Footer from "./components/Footer"; 
 import ProtectedRoute from "./Components/ProtectedRoute";
@@ -49,6 +50,10 @@ function App() {
             <Route path="/matches/:matchId/select-cvc" element={<CVCSelectionPage />} />
             <Route path="/matches/:matchId/teams/:teamId" element={<TeamPreviewPage />} />
             <Route path="/matches/:matchId/view-team/:teamId" element={<ViewTeamPage />} />
+            <Route
+  path="/matches/:matchId/contests/:contestId/join"
+  element={<JoinContestPage />}
+/>
 
             {/* Protected */}
             <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />

@@ -28,16 +28,16 @@ export const getAvailableContests = async (req, res) => {
 // ✅ Join contest
 export const joinContest = async (req, res) => {
   try {
-    const userId = req.user._id; // from auth middleware
-    const { teamId } = req.body;
+    const userId = req.user._id;
+    const { teamId, contestId, matchId } = req.body;
 
     // ---------------- Contest Check ----------------
-    const contest = await Contest.findOne({ status: "Upcoming" });
-    if (!contest) {
+    const contest = await Contest.findById(contestId);
+    if (!contest || contest.status !== "Upcoming") {
       return res.status(404).json({ message: "No active contest found." });
     }
 
-    // Check if contest has space
+    // Check if contest is full
     if (contest.joinedUsers.length >= contest.maxTeams) {
       return res.status(400).json({ message: "Contest is full." });
     }
@@ -51,10 +51,14 @@ export const joinContest = async (req, res) => {
     }
 
     // ---------------- Team Validation ----------------
-    const team = await Team.findOne({ _id: teamId, userId, contestId: contest._id });
+    const team = await Team.findOne({ _id: teamId, userId, matchId });
     if (!team) {
       return res.status(400).json({ message: "Invalid or missing team." });
     }
+
+    // ✅ Attach contestId now
+    team.contestId = contest._id;
+    await team.save();
 
     // ---------------- User Balance ----------------
     const user = await User.findById(userId);
@@ -64,11 +68,11 @@ export const joinContest = async (req, res) => {
         .json({ message: "Insufficient balance to join contest." });
     }
 
-    // ---------------- Deduct Entry Fee ----------------
+    // Deduct entry fee
     user.virtualCash -= contest.entryFee;
     await user.save();
 
-    // ---------------- Log Transaction ----------------
+    // Log transaction
     const transaction = new Transaction({
       userId,
       amount: contest.entryFee,
@@ -79,7 +83,7 @@ export const joinContest = async (req, res) => {
     });
     await transaction.save();
 
-    // ---------------- Add to Contest ----------------
+    // Add to Contest
     contest.joinedUsers.push({ userId, teamId });
     await contest.save();
 
@@ -87,7 +91,7 @@ export const joinContest = async (req, res) => {
       message: "Successfully joined contest.",
       contestId: contest._id,
       teamId: team._id,
-      spotsLeft: contest.spotsLeft,
+      spotsLeft: contest.maxTeams - contest.joinedUsers.length,
       userBalance: user.virtualCash,
     });
   } catch (error) {
