@@ -95,3 +95,27 @@ export const joinContest = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+export const getUserContests = async (req, res) => {
+  try {
+    const userId = req.user._id; // comes from auth middleware
+
+    const contests = await Contest.find({ "joinedUsers.userId": userId })
+      .populate("joinedUsers.teamId", "name players") // optional: populate team info
+      .select("-__v")
+      .lean();
+
+    if (!contests || contests.length === 0) {
+      return res.status(404).json({ message: "User has not joined any contests." });
+    }
+
+    res.status(200).json({
+      message: "Joined contests fetched successfully.",
+      contests,
+    });
+  } catch (error) {
+    console.error("Get User Contests Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
