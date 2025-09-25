@@ -5,38 +5,55 @@ import SavedTeamModal from "../Components/SavedTeamModal.jsx";
 export default function CVCSelectionPage() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const matchId = state?.matchId; // ✅ fix: use state properly
+  const matchId = state?.matchId;
   const selectedPlayers = state?.selectedPlayers || [];
   const [captain, setCaptain] = useState(null);
   const [viceCaptain, setViceCaptain] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSave = () => {
-  // Load existing teams
-  const existing = JSON.parse(localStorage.getItem("savedTeams") || "[]");
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token"); // 👈 JWT
+      if (!token) {
+        alert("You must be logged in to save a team.");
+        return;
+      }
 
-  // Filter teams for this match
-  const matchTeams = existing.filter((t) => t.matchId === matchId);
+      const teamName = `MyTeam (T${Date.now()})`;
 
-  // Generate dynamic team name (like Dream11: T1, T2, T3)
-  const teamNumber = matchTeams.length + 1;
-  const teamName = `MyTeam (T${teamNumber})`;
+      const formattedPlayers = selectedPlayers.map((p) => ({
+        playerId: p.id,
+        playerName: p.name,
+        role: p.role,
+        isCaptain: captain === p.id,
+        isViceCaptain: viceCaptain === p.id,
+      }));
 
-  const newTeam = {
-    teamName,
-    players: selectedPlayers,
-    captain: selectedPlayers.find((p) => p.id === captain),
-    viceCaptain: selectedPlayers.find((p) => p.id === viceCaptain),
-    matchId,
+      const res = await fetch("http://localhost:5001/api/teams", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          matchId,
+          teamName,
+          players: formattedPlayers,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to save team");
+      }
+
+      await res.json();
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("❌ Error saving team:", error);
+      alert(error.message);
+    }
   };
-
-  // Save in localStorage
-  existing.push(newTeam);
-  localStorage.setItem("savedTeams", JSON.stringify(existing));
-
-  setIsModalOpen(true);
-};
-
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -108,7 +125,7 @@ export default function CVCSelectionPage() {
         onClose={() => setIsModalOpen(false)}
         onDone={() => {
           setIsModalOpen(false);
-          navigate(`/matches/${matchId}/contests`); // ✅ go back to contest page
+          navigate(`/matches/${matchId}/contests`);
         }}
         team={{
           teamName: "My Fantasy XI",

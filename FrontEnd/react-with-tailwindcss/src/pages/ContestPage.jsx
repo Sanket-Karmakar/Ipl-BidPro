@@ -1,4 +1,3 @@
-// src/pages/ContestPage.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import TeamCard from "../components/TeamCard";
@@ -6,7 +5,7 @@ import TeamCard from "../components/TeamCard";
 export default function ContestPage() {
   const [activeTab, setActiveTab] = useState("contests");
   const { matchId } = useParams();
-  const { state } = useLocation(); // 👈 get passed match info
+  const { state } = useLocation();
   const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
 
@@ -14,13 +13,53 @@ export default function ContestPage() {
     state?.matchEnded || state?.status?.toLowerCase().includes("live");
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("savedTeams") || "[]");
-    const matchTeams = saved.filter((t) => t.matchId === matchId);
-    setTeams(matchTeams);
+    const fetchTeams = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const res = await fetch(`http://localhost:5001/api/teams/${matchId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || "Failed to fetch teams");
+        }
+
+        const data = await res.json();
+        setTeams(data);
+      } catch (error) {
+        console.error("❌ Error fetching teams:", error);
+      }
+    };
+
+    fetchTeams();
   }, [matchId, activeTab]);
 
+  const handleRemove = async (teamId) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const res = await fetch(`http://localhost:5001/api/teams/${teamId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to delete team");
+      }
+
+      setTeams((prev) => prev.filter((t) => t._id !== teamId));
+    } catch (error) {
+      console.error("❌ Error deleting team:", error);
+      alert(error.message);
+    }
+  };
+
   const renderContent = () => {
-    // 🚫 If match is completed or ongoing → block Create Team
     if (isBlocked) {
       return (
         <div className="flex flex-col items-center justify-center h-[70vh] text-center">
@@ -65,26 +104,21 @@ export default function ContestPage() {
                 </button>
               </div>
             ) : (
-              // Inside case "teams"
-teams.map((team, idx) => (
-  <TeamCard
-    key={idx}
-    team={team}
-    onEdit={() => navigate(`/matches/${matchId}/create-team`)}
-    onView={() => navigate(`/matches/${matchId}/view-team/${idx}`)}
-    onRemove={() => {
-      const saved = JSON.parse(localStorage.getItem("savedTeams") || "[]");
-      const matchTeams = saved.filter((t) => t.matchId === matchId);
-
-      matchTeams.splice(idx, 1); // remove by index
-      const newTeams = saved.filter((t) => t.matchId !== matchId).concat(matchTeams);
-
-      localStorage.setItem("savedTeams", JSON.stringify(newTeams));
-      setTeams(matchTeams); // refresh UI
-    }}
-  />
-))
-
+              teams.map((team) => (
+                <TeamCard
+                  key={team._id}
+                  team={team}
+                  onEdit={() =>
+                    navigate(`/matches/${matchId}/create-team`, {
+                      state: { editTeam: team },
+                    })
+                  }
+                  onView={() =>
+                    navigate(`/matches/${matchId}/view-team/${team._id}`)
+                  }
+                  onRemove={() => handleRemove(team._id)}
+                />
+              ))
             )}
           </div>
         );
@@ -96,7 +130,6 @@ teams.map((team, idx) => (
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Tabs */}
       <div className="flex border-b bg-white">
         {["contests", "mycontests", "teams"].map((tab) => (
           <button
