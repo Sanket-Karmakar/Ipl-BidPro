@@ -2,12 +2,9 @@
 import { Player } from "../models/player.models.js";
 import { fetchAndStorePlayerStats } from "../services/playerStats.service.js";
 
-// ------------------ Controllers ------------------
-
 // POST /api/players/fetch-stats
 export async function fetchPlayerStatsController(req, res) {
   try {
-    // ✅ Accept name from either body or query
     const playerName = req.body.name || req.query.name;
     if (!playerName) {
       return res.status(400).json({
@@ -15,7 +12,6 @@ export async function fetchPlayerStatsController(req, res) {
       });
     }
 
-    // ✅ This already fetches from CricAPI + upserts into DB
     const player = await fetchAndStorePlayerStats(playerName);
 
     if (!player) {
@@ -46,7 +42,6 @@ export async function getPlayerController(req, res) {
         .status(404)
         .json({ success: false, message: "Player not found in DB." });
     }
-
     res.json({ success: true, data: player });
   } catch (error) {
     console.error("❌ Error in getPlayerController:", error.message);

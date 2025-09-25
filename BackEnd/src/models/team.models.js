@@ -39,10 +39,11 @@ const teamSchema = new mongoose.Schema({
         required: true
     },
     contestId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Contest',
-        required: true
-    },
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Contest',
+  required: false  // 👈 temporary
+},
+
     teamName: {
         type: String, 
         default: "My Team",

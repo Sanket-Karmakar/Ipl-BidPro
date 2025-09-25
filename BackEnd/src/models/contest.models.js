@@ -1,119 +1,142 @@
 import mongoose from "mongoose";
 
-const contestSchema = new mongoose.Schema({
+const contestSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
+
     matchId: {
-        type: String,           // from Cricket API
-        required: true
+      type: String, // from Cricket API (keep String since it's external ID)
+      required: true,
+      index: true, // faster lookups by matchId
     },
+
     matchType: {
-        type: String,
-        enum: ['T20', 'Test', 'ODI'],
-        required: true
+      type: String,
+      enum: ["T20", "Test", "ODI"],
+      required: true,
     },
+
     entryFee: {
-        type: Number,           // Virtual Cash
-        default: 0,
-        min: 0
+      type: Number, // Virtual Cash
+      default: 0,
+      min: 0,
     },
+
     prizePool: {
-        type: Number,
-        default: 0,
-        min: 0
+      type: Number,
+      default: 0,
+      min: 0,
     },
+
     maxTeams: {
-        type: Number,
-        default: 100,
-        min: 2
+      type: Number,
+      default: 100,
+      min: 2,
     },
-    joinedUsers: [{
+
+    joinedUsers: [
+      {
         userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
         },
         teamId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Team',
-            required: true
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Team",
+          required: true,
         },
-        _id: false
-    }],
+        joinedAt: {
+          type: Date,
+          default: Date.now, // track when user joined
+        },
+        _id: false,
+      },
+    ],
+
     status: {
-        type: String,
-        enum: ['Upcoming', 'Live', 'Completed'],
-        default: 'Upcoming'
+      type: String,
+      enum: ["Upcoming", "Live", "Completed", "Cancelled"],
+      default: "Upcoming",
     },
-    leaderboard: [{
+
+    leaderboard: [
+      {
         userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
         },
         teamId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Team',
-            required: true
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Team",
+          required: true,
         },
         points: {
-            type: Number,
-            default: 0
+          type: Number,
+          default: 0,
+          min: 0,
         },
         rank: {
-            type: Number
+          type: Number,
+          default: null,
         },
-        _id: false
-    }],
+        _id: false,
+      },
+    ],
+
     matchStartAt: {
-        type: Date
+      type: Date,
+      required: false,
     },
+
     isPractice: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
+
     scoringVersion: {
-        type: String,
-        default: "v1"
-    }
-}, { timestamps: true });
+      type: String,
+      default: "v1",
+    },
+  },
+  { timestamps: true }
+);
 
-contestSchema.index({
-    matchId: 1,
-    status: 1
-});
-contestSchema.index({
-    "leaderboard.rank": 1
-});
+// ----------------- Indexes -----------------
+contestSchema.index({ matchId: 1, status: 1 });
+contestSchema.index({ "leaderboard.rank": 1 });
+contestSchema.index({ title: "text" }); // allow search by title
 
-contestSchema.set('toJSON', {
-    virtuals: true 
-});
-contestSchema.set('toObject', { 
-    virtuals: true 
-});
-
+// ----------------- Virtuals -----------------
 contestSchema.virtual("spotsLeft").get(function () {
-    return Math.max(0, (this.maxTeams || 0) - (this.joinedUsers?.length || 0));
+  return Math.max(
+    0,
+    (this.maxTeams || 0) - (this.joinedUsers?.length || 0)
+  );
 });
 
+// ----------------- Hooks -----------------
 contestSchema.pre("save", function (next) {
-    if (this.joinedUsers && this.joinedUsers.length > (this.maxTeams || 0)) {
-        return next(new Error("Contest cannot have more joined users than maxTeams."));
-    }
-    const userIds = (this.joinedUsers || []).map(j => String(j.userId));
-    if ((new Set(userIds)).size !== userIds.length) {
-        return next(new Error("Duplicate user entries found in joinedUsers."));
-    }
-    next();
+  // Prevent exceeding team limit
+  if (this.joinedUsers && this.joinedUsers.length > (this.maxTeams || 0)) {
+    return next(
+      new Error("Contest cannot have more joined users than maxTeams.")
+    );
+  }
+
+  // Prevent duplicate users joining
+  const userIds = (this.joinedUsers || []).map((j) => String(j.userId));
+  if (new Set(userIds).size !== userIds.length) {
+    return next(new Error("Duplicate user entries found in joinedUsers."));
+  }
+
+  next();
 });
 
-<<<<<<< HEAD
+// ----------------- Export -----------------
 export const Contest = mongoose.model("Contest", contestSchema);
-=======
-export const Contest = mongoose.model("Contest", contestSchema);
-
->>>>>>> 220e5f4d48593a812bc7f2e44f66c816b4ef1d6b

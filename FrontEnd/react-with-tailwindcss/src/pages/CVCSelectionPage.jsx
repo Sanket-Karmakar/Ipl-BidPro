@@ -1,6 +1,15 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import SavedTeamModal from "../Components/SavedTeamModal";
+import SavedTeamModal from "../Components/SavedTeamModal.jsx";
+
+function mapRole(role) {
+  role = role.toLowerCase();
+  if (role.includes("wk") || role.includes("keeper")) return "Wicket-Keeper";
+  if (role.includes("bat")) return "Batsman";
+  if (role.includes("allrounder") || role.includes("ar")) return "All-Rounder";
+  if (role.includes("bowl")) return "Bowler";
+  return "Batsman";
+}
 
 export default function CVCSelectionPage() {
   const navigate = useNavigate();
@@ -11,30 +20,37 @@ export default function CVCSelectionPage() {
   const [viceCaptain, setViceCaptain] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSave = () => {
-  // Load existing teams
-  const existing = JSON.parse(localStorage.getItem("savedTeams") || "[]");
+  
+  const handleSave = async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
 
-  // Filter teams for this match
-  const matchTeams = existing.filter((t) => t.matchId === matchId);
+    const res = await fetch("http://localhost:5001/api/teams", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        matchId,
+        teamName: `My Team ${Date.now()}`,
+        players: selectedPlayers.map((p) => ({
+          playerId: p.id,
+          playerName: p.name,
+          role: mapRole(p.role), // ✅ normalized role
+          isCaptain: p.id === captain,
+          isViceCaptain: p.id === viceCaptain,
+        })),
+      }),
+    });
 
-  // Generate dynamic team name (like Dream11: T1, T2, T3)
-  const teamNumber = matchTeams.length + 1;
-  const teamName = `MyTeam (T${teamNumber})`;
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to save team");
 
-  const newTeam = {
-    teamName,
-    players: selectedPlayers,
-    captain: selectedPlayers.find((p) => p.id === captain),
-    viceCaptain: selectedPlayers.find((p) => p.id === viceCaptain),
-    matchId,
-  };
-
-  // Save in localStorage
-  existing.push(newTeam);
-  localStorage.setItem("savedTeams", JSON.stringify(existing));
-
-  setIsModalOpen(true);
+    setIsModalOpen(true);
+  } catch (err) {
+    alert(err.message);
+  }
 };
 
 

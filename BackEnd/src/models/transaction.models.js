@@ -1,44 +1,36 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const transactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema(
+  {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        index: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     amount: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     type: {
-        type: String,
-        required: true,
-        enum: ['DEBIT', 'CREDIT']
+      type: String,
+      enum: ["DEBIT", "CREDIT"],
+      required: true,
     },
-    reason: {
-        type: String,
-        enum: ['ENTRY_FEE', 'REFUND', 'PRIZE', 'BONUS'],
-        required: true
+    purpose: {
+      type: String,
+      enum: ["ENTRY_FEE", "PRIZE", "BONUS"],
+      required: true,
     },
     contestId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Contest'
-    },
-    teamId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Team'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contest",
     },
     balanceAfter: {
-        type: Number,
-        required: true
+      type: Number, // user balance after transaction
+      required: true,
     },
-    meta: {
-        type: Object
-    }
-}, { timestamps: true});
+  },
+  { timestamps: true }
+);
 
-transactionSchema.index({ userId: 1, createdAt: -1 });
-
-export default Transaction = mongoose.model("Transaction", transactionSchema);
-
+export const Transaction = mongoose.model("Transaction", transactionSchema);

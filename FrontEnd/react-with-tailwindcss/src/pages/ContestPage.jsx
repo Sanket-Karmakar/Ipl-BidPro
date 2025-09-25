@@ -14,10 +14,21 @@ export default function ContestPage() {
     state?.matchEnded || state?.status?.toLowerCase().includes("live");
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("savedTeams") || "[]");
-    const matchTeams = saved.filter((t) => t.matchId === matchId);
-    setTeams(matchTeams);
-  }, [matchId, activeTab]);
+  async function fetchTeams() {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const res = await fetch(`http://localhost:5001/api/teams/${matchId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+      if (res.ok) setTeams(data.data);
+    } catch (err) {
+      console.error("Error fetching teams:", err);
+    }
+  }
+  fetchTeams();
+}, [matchId, activeTab]);
 
   const renderContent = () => {
     // 🚫 If match is completed or ongoing → block Create Team
@@ -33,14 +44,16 @@ export default function ContestPage() {
             You haven’t joined any contest for this match. <br />
             Join the action for upcoming matches and start winning!
           </p>
-          <button
-            onClick={() =>
-              navigate("/matches", { state: { defaultTab: "upcoming" } })
-            }
-            className="bg-green-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-600"
-          >
-            VIEW UPCOMING MATCHES
-          </button>
+<button
+  onClick={() =>
+    navigate(`/matches/${matchId}/create-team`, {
+      state: { contestId: contest._id } // 👈 pass contest id here
+    })
+  }
+  className="bg-green-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-600"
+>
+  VIEW UPCOMING MATCHES
+</button>
         </div>
       );
     }
