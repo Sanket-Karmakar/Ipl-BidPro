@@ -1,9 +1,31 @@
-// controllers/contestController.js
+// controllers/contest.controller.js
 import { Contest } from "../models/contest.models.js";
 import User from "../models/user.models.js";   
 import { Transaction } from "../models/transaction.models.js";
 import { Team } from "../models/team.models.js";
 
+// ✅ Fetch available contests
+export const getAvailableContests = async (req, res) => {
+  try {
+    const contests = await Contest.find({ status: "Upcoming" })
+      .select("-__v") // optional: exclude internal fields
+      .lean();
+
+    if (!contests || contests.length === 0) {
+      return res.status(404).json({ message: "No available contests." });
+    }
+
+    res.status(200).json({
+      message: "Available contests fetched successfully.",
+      contests,
+    });
+  } catch (error) {
+    console.error("Get Available Contests Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// ✅ Join contest
 export const joinContest = async (req, res) => {
   try {
     const userId = req.user._id; // from auth middleware
@@ -73,4 +95,3 @@ export const joinContest = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
