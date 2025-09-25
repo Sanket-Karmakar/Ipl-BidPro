@@ -1,3 +1,5 @@
+// team.models.js
+
 import mongoose from 'mongoose';
 
 const playerPickSchema = new mongoose.Schema({
@@ -39,11 +41,10 @@ const teamSchema = new mongoose.Schema({
         required: true
     },
     contestId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'Contest',
-  required: false  // 👈 temporary
-},
-
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Contest',
+        required: false   // 👈 made optional
+    },
     teamName: {
         type: String, 
         default: "My Team",
@@ -68,7 +69,7 @@ const teamSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-teamSchema.index({ userId: 1, contestId: 1 }, { unique: true });
+teamSchema.index({ userId: 1, matchId: 1, contestId: 1 }, { unique: true }); 
 teamSchema.index({ contestId: 1, totalPoints: -1 });
 
 teamSchema.pre("validate", function (next) {
@@ -97,4 +98,3 @@ teamSchema.pre("validate", function (next) {
 });
 
 export const Team = mongoose.model("Team", teamSchema);
-

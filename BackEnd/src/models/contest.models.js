@@ -140,3 +140,5 @@ contestSchema.pre("save", function (next) {
 
 // ----------------- Export -----------------
 export const Contest = mongoose.model("Contest", contestSchema);
+
+

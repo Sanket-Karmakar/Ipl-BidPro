@@ -57,7 +57,7 @@ const Header = () => {
 
           {/* Wallet */}
           <div className="bg-yellow-400 text-black px-3 py-1 rounded-full font-semibold shadow cursor-pointer hover:bg-yellow-300">
-            ₹ 500
+            $ 1000
           </div>
 
           {/* Profile dropdown */}

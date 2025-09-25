@@ -1,9 +1,9 @@
 import express from 'express';
-import { verifyJWT } from '../middlewares/auth.middlewares.js';
+import { protect } from '../middlewares/auth.middlewares.js';
 
 const router = express.Router();
 
-router.get('/me', verifyJWT, (req, res) => {
+router.get('/me', protect, (req, res) => {
     res.status(200).json({
         success: true,
         message: "User fetched successfully!",

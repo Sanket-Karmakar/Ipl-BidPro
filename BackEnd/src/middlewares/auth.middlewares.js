@@ -8,8 +8,7 @@ const verifyJWT = asyncHandler( async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')){
-        throw new ApiError(401, "Unauthorized: No token provided!");
-        console.log("Token received:", token);
+        throw new ApiError(401, "Unauthorized: No token provided!")
     }
 
     const token = authHeader.split(" ")[1];
@@ -30,5 +29,4 @@ const verifyJWT = asyncHandler( async (req, res, next) => {
     }
 })
 
-export { verifyJWT };
-
+export { verifyJWT as protect};

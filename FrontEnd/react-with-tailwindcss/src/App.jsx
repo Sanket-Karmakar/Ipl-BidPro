@@ -48,7 +48,7 @@ function App() {
             <Route path="/matches/:matchId/create-team" element={<CreateTeamPage />} /> 
             <Route path="/matches/:matchId/select-cvc" element={<CVCSelectionPage />} />
             <Route path="/matches/:matchId/teams/:teamId" element={<TeamPreviewPage />} />
-            <Route path="/matches/:matchId/view-team/:teamIndex" element={<ViewTeamPage />} />
+            <Route path="/matches/:matchId/view-team/:teamId" element={<ViewTeamPage />} />
 
             {/* Protected */}
             <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />

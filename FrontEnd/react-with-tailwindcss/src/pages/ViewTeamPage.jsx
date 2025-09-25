@@ -1,26 +1,61 @@
 // src/pages/ViewTeamPage.jsx
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { categorizeRole, roleLabel } from "../utils/roleUtils";
+import { useAuth } from "../context/UserContext";
+import { categorizeRole, roleLabel, normalizeRole } from "../utils/roleUtils";
 
 export default function ViewTeamPage() {
-  const { matchId, teamIndex } = useParams();
+  const { matchId, teamId } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth();
+  const [team, setTeam] = useState(null);
 
-  // Load teams from localStorage
-  const saved = JSON.parse(localStorage.getItem("savedTeams") || "[]");
-  const matchTeams = saved.filter((t) => t.matchId === matchId);
-  const team = matchTeams[teamIndex];
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        if (!token) return;
+
+        const res = await fetch(`http://localhost:5001/api/teams/${matchId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.message || "Failed to fetch team");
+        }
+
+        const data = await res.json();
+        const found = data.find((t) => t._id === teamId);
+
+        if (found) {
+          found.players = found.players.map((p) => ({
+            ...p,
+            role: normalizeRole(p.role),
+            playerImg: p.playerImg ?? p.image ?? `https://h.cricapi.com/img/players/${p.playerId}.jpg`,
+            playerName: p.playerName || p.name || "",
+            teamName: p.teamName,
+          }));
+        }
+
+        setTeam(found);
+      } catch (error) {
+        console.error("❌ Error fetching team:", error);
+      }
+    };
+
+    fetchTeam();
+  }, [matchId, teamId, token]);
 
   if (!team) {
     return <p className="text-center mt-10 text-red-500">Team not found!</p>;
   }
 
-  // Group players by corrected roles
+  // ✅ Group players
   const grouped = { WK: [], BAT: [], AR: [], BOWL: [] };
   team.players.forEach((p) => {
     const key = categorizeRole(p.role);
     if (grouped[key]) grouped[key].push(p);
-    else grouped.BAT.push(p); // fallback → BAT
+    else grouped.BAT.push(p);
   });
 
   return (
@@ -37,41 +72,42 @@ export default function ViewTeamPage() {
       </div>
 
       {/* Team sections */}
-      {Object.entries(grouped).map(([role, players]) => (
-        players.length > 0 && (
-          <div key={role} className="mb-6">
-            <h2 className="text-lg font-semibold mb-3">{roleLabel(role)}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {players.map((p) => (
-                <div
-                  key={p.id}
-                  className="bg-white rounded-lg shadow p-3 flex flex-col items-center relative"
-                >
-                  <img
-                    src={p.playerImg || "https://via.placeholder.com/80"}
-                    alt={p.name}
-                    className="w-16 h-16 rounded-full mb-2 object-cover"
-                  />
-                  <p className="text-sm font-semibold">{p.name}</p>
-                  <p className="text-xs text-gray-500">{p.teamName}</p>
+      {Object.entries(grouped).map(
+        ([role, players]) =>
+          players.length > 0 && (
+            <div key={role} className="mb-8">
+              <h2 className="text-lg font-semibold mb-3">{roleLabel(role)}</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {players.map((p) => (
+                  <div
+                    key={p.playerId}
+                    className="bg-white rounded-xl shadow-md p-4 flex flex-col items-center relative hover:shadow-lg transition"
+                  >
+                    <img
+                      src={p.playerImg}
+                      alt={p.playerName}
+                      className="w-20 h-20 rounded-full mb-3 object-cover border-2 border-gray-200"
+                    />
+                    <p className="text-sm font-semibold">{p.playerName}</p>
+                    <p className="text-xs text-gray-500">{p.teamName}</p>
 
-                  {/* Show C / VC badges */}
-                  {team.captain?.id === p.id && (
-                    <span className="absolute top-1 right-2 bg-blue-100 text-blue-600 text-xs font-bold px-1.5 py-0.5 rounded">
-                      C
-                    </span>
-                  )}
-                  {team.viceCaptain?.id === p.id && (
-                    <span className="absolute top-1 left-2 bg-green-100 text-green-600 text-xs font-bold px-1.5 py-0.5 rounded">
-                      VC
-                    </span>
-                  )}
-                </div>
-              ))}
+                    {/* C/VC badges */}
+                    {p.isCaptain && (
+                      <span className="absolute top-2 right-2 bg-blue-100 text-blue-600 text-xs font-bold px-2 py-0.5 rounded">
+                        C
+                      </span>
+                    )}
+                    {p.isViceCaptain && (
+                      <span className="absolute top-2 left-2 bg-green-100 text-green-600 text-xs font-bold px-2 py-0.5 rounded">
+                        VC
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )
-      ))}
+          )
+      )}
     </div>
   );
 }

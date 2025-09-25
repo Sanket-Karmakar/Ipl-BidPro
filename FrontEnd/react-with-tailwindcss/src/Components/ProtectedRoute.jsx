@@ -1,12 +1,13 @@
+// src/components/ProtectedRoute.jsx
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 
 export default function ProtectedRoute() {
-  const { user, ready } = useAuth();
+  const { user } = useAuth();
 
-  // Wait until we hydrate from localStorage, otherwise we might flicker/redirect incorrectly
-  if (!ready) return null; // or a spinner
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
-  return user ? <Outlet /> : <Navigate to="/login" replace />;
+  return <Outlet />; // ✅ MUST return Outlet for nested routes
 }
-

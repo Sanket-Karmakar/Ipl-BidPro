@@ -70,7 +70,7 @@ export default function TeamPreviewPage() {
                 className="flex flex-col items-center bg-white shadow rounded-lg p-3 relative"
               >
                 <img
-                  src={p.playerImg || "https://via.placeholder.com/80"}
+                  src={p.playerImg || `https://h.cricapi.com/img/players/${p.playerId}.jpg`}
                   alt={p.name}
                   className="w-16 h-16 rounded-full object-cover mb-2"
                 />

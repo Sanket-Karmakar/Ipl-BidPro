@@ -5,14 +5,16 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Load user from localStorage when app starts
+  // ✅ Load user + token from localStorage when app starts
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    const savedToken = localStorage.getItem("accessToken");
+
+    if (savedUser) setUser(JSON.parse(savedUser));
+    if (savedToken) setAccessToken(savedToken);
   }, []);
 
   // ✅ Login function
@@ -34,6 +36,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(data.data.user));
 
       setUser(data.data.user);
+      setAccessToken(data.data.accessToken);
+
       return true;
     } catch (err) {
       console.error("Login failed:", err.message);
@@ -49,11 +53,13 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
+
     setUser(null);
+    setAccessToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token: accessToken, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

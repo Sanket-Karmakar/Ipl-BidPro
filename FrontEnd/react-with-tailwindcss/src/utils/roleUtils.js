@@ -1,30 +1,30 @@
 // src/utils/roleUtils.js
-export function categorizeRole(role = "") {
-  const r = (role || "").toString().toLowerCase().trim();
+export const normalizeRole = (role) => {
+  const r = (role || "").toString().toLowerCase();
 
-  // wicket-keeper
-  if (r.includes("wk") || r.includes("wicket")) return "WK";
-
-  // SPECIFIC: "batting allrounder" should be treated as BAT
-  // catch phrases: "batting allrounder", "batting all-rounder"
-  if (/(batting\s*all[-\s]?round)/.test(r) || r.includes("batting allrounder")) {
-    return "BAT";
+  // PRIORITY: detect all-rounder first (because "Batting Allrounder" contains "bat")
+  if (r.includes("all") || r.includes("allround") || r.includes("all-round") || r.includes("all round") || r.includes("allrounder") || r === "ar") {
+    return "All-Rounder";
   }
 
-  // generic allrounder (non-batting specific) => AR
-  if (r.includes("allround") || r.includes("all-round")) return "AR";
+  if (r.includes("wk") || r.includes("wicket")) return "Wicket-Keeper";
+  if (r.includes("bat") && !r.includes("all")) return "Batsman";
+  if (r.includes("bowl")) return "Bowler";
 
-  // batsman / batter / starts with "bat" => BAT
-  if (r === "batsman" || r === "batter" || r.startsWith("bat")) return "BAT";
+  // fallback
+  return "Batsman";
+};
 
-  // bowlers
-  if (r.includes("bowl") || r.includes("bowler")) return "BOWL";
-
-  // fallback → treat as batter (safer for fantasy)
+export const categorizeRole = (role) => {
+  const r = (role || "").toString().toLowerCase();
+  if (r.includes("wk") || r.includes("wicket")) return "WK";
+  if (r.includes("all") || r.includes("allround") || r.includes("ar")) return "AR";
+  if (r.includes("bat") && !r.includes("all")) return "BAT";
+  if (r.includes("bowl")) return "BOWL";
   return "BAT";
-}
+};
 
-export function roleLabel(key) {
+export const roleLabel = (key) => {
   switch (key) {
     case "WK":
       return "WICKET-KEEPERS";
@@ -37,4 +37,4 @@ export function roleLabel(key) {
     default:
       return "PLAYERS";
   }
-}
+};
