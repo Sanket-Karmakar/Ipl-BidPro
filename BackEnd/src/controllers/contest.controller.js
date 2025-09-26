@@ -1,15 +1,12 @@
-// controllers/contest.controller.js
 import { Contest } from "../models/contest.models.js";
-import User from "../models/user.models.js";   
+import User from "../models/user.models.js";
 import { Transaction } from "../models/transaction.models.js";
 import { Team } from "../models/team.models.js";
 
-// ✅ Fetch available contests
+// ✅ Fetch available contests (unchanged)
 export const getAvailableContests = async (req, res) => {
   try {
-    const contests = await Contest.find({ status: "Upcoming" })
-      .select("-__v") // optional: exclude internal fields
-      .lean();
+    const contests = await Contest.find({ status: "Upcoming" }).select("-__v").lean();
 
     if (!contests || contests.length === 0) {
       return res.status(404).json({ message: "No available contests." });
@@ -25,24 +22,24 @@ export const getAvailableContests = async (req, res) => {
   }
 };
 
-// ✅ Join contest
+// ✅ Join contest (now takes userId from body instead of JWT)
 export const joinContest = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const { teamId, contestId, matchId } = req.body;
+    const { userId, teamId } = req.body; // userId is now passed directly
 
-    // ---------------- Contest Check ----------------
-    const contest = await Contest.findById(contestId);
-    if (!contest || contest.status !== "Upcoming") {
+    if (!userId || !teamId) {
+      return res.status(400).json({ message: "userId and teamId are required." });
+    }
+
+    const contest = await Contest.findOne({ status: "Upcoming" });
+    if (!contest) {
       return res.status(404).json({ message: "No active contest found." });
     }
 
-    // Check if contest is full
     if (contest.joinedUsers.length >= contest.maxTeams) {
       return res.status(400).json({ message: "Contest is full." });
     }
 
-    // Check if already joined
     const alreadyJoined = contest.joinedUsers.some(
       (j) => String(j.userId) === String(userId)
     );
@@ -50,29 +47,19 @@ export const joinContest = async (req, res) => {
       return res.status(400).json({ message: "User already joined contest." });
     }
 
-    // ---------------- Team Validation ----------------
-    const team = await Team.findOne({ _id: teamId, userId, matchId });
+    const team = await Team.findOne({ _id: teamId, userId, contestId: contest._id });
     if (!team) {
       return res.status(400).json({ message: "Invalid or missing team." });
     }
 
-    // ✅ Attach contestId now
-    team.contestId = contest._id;
-    await team.save();
-
-    // ---------------- User Balance ----------------
     const user = await User.findById(userId);
     if (!user || user.virtualCash < contest.entryFee) {
-      return res
-        .status(400)
-        .json({ message: "Insufficient balance to join contest." });
+      return res.status(400).json({ message: "Insufficient balance to join contest." });
     }
 
-    // Deduct entry fee
     user.virtualCash -= contest.entryFee;
     await user.save();
 
-    // Log transaction
     const transaction = new Transaction({
       userId,
       amount: contest.entryFee,
@@ -83,7 +70,6 @@ export const joinContest = async (req, res) => {
     });
     await transaction.save();
 
-    // Add to Contest
     contest.joinedUsers.push({ userId, teamId });
     await contest.save();
 
@@ -91,7 +77,7 @@ export const joinContest = async (req, res) => {
       message: "Successfully joined contest.",
       contestId: contest._id,
       teamId: team._id,
-      spotsLeft: contest.maxTeams - contest.joinedUsers.length,
+      spotsLeft: contest.spotsLeft,
       userBalance: user.virtualCash,
     });
   } catch (error) {
@@ -100,13 +86,17 @@ export const joinContest = async (req, res) => {
   }
 };
 
-
+// ✅ Get contests joined by a user (now takes userId from query)
 export const getUserContests = async (req, res) => {
   try {
-    const userId = req.user._id; // comes from auth middleware
+    const { userId } = req.query; // userId passed in query
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required." });
+    }
 
     const contests = await Contest.find({ "joinedUsers.userId": userId })
-      .populate("joinedUsers.teamId", "name players") // optional: populate team info
+      .populate("joinedUsers.teamId", "name players")
       .select("-__v")
       .lean();
 
