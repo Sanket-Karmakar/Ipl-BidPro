@@ -29,7 +29,7 @@ export default function Profile() {
           <img
             src={
               user?.profileImage
-                ? `http://localhost:5001${user.profileImage}`
+                ? `${user.profileImage}`
                 : "/default-avatar.png"
             }
             alt="User Avatar"

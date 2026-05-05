@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
   },
   virtualCash: {
     type: Number, 
-    default: 10000,
+    default: 1000,
     min: 0
   },
   profileImage: {
@@ -98,7 +98,7 @@ userSchema.virtual('profileImageUrl').get(function () {
   // prefer explicit SERVER_URL env var, fall back to localhost + PORT
   const base =
     process.env.SERVER_URL ||
-    `http://localhost:${process.env.PORT || 5001}`;
+    `http://localhost:${process.env.PORT || 5005}`;
   // ensure leading slash
   return this.profileImage.startsWith("/") ? `${base}${this.profileImage}` : `${base}/${this.profileImage}`;
 });

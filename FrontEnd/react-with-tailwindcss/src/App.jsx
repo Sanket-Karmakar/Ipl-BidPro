@@ -1,5 +1,7 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import PlayerCompare from "./pages/PlayerCompare";
+import MatchPreview from "./pages/MatchPreview";
 import Header from "./Components/Header";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,14 +12,22 @@ import Analysis from "./pages/Analysis";
 import MatchesPages from "./pages/MatchesPages";
 import PlayerProfile from "./pages/PlayerProfile";
 import ContestPage from "./pages/ContestPage";
+import ScorecardHub from "./pages/ScorecardHub";
+import LiveScorecard from "./pages/LiveScorecard";
 import CreateTeamPage from "./pages/CreateTeamPage";
 import CVCSelectionPage from "./pages/CVCSelectionPage";
 import TeamPreviewPage from "./pages/TeamPreviewPage";
 import ViewTeamPage from "./pages/ViewTeamPage";
 import JoinContestPage from "./pages/JoinContestPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import BidPro from "./pages/BidPro";
+import MyTeams from "./pages/MyTeams";
+import Wallet from "./pages/Wallet";
 import Footer from "./components/Footer"; 
 import ProtectedRoute from "./Components/ProtectedRoute";
+import Settings from "./pages/Settings";
+import GlobalLeaderboard from "./pages/GlobalLeaderboard";
+import Support from "./pages/Support";
 import { useAuth } from "./context/UserContext";
 
 function App() {
@@ -38,13 +48,16 @@ function App() {
             {/* Auth */}
             <Route path="/signup" element={user ? <Navigate to="/home" /> : <Signup />} />
             <Route path="/login" element={user ? <Navigate to="/home" /> : <Login />} />
-
             {/* Public */}
             <Route path="/bidpro" element={<BidPro />} />
             <Route path="/analysis" element={<Analysis />} />
-            <Route path="/player/:id" element={<PlayerProfile />} />
+            <Route path="/player/:name" element={<PlayerProfile />} />
+            <Route path="/compare-players" element={<PlayerCompare />} />
 
             {/* Matches + Contests */}
+            <Route path="/scorecards" element={<ScorecardHub />} />
+            <Route path="/matches/:matchId/scorecard" element={<LiveScorecard />} />
+            <Route path="/matches/:matchId/preview" element={<MatchPreview />} />
             <Route path="/matches/:matchId/contests" element={<ContestPage />} />
             <Route path="/matches/:matchId/create-team" element={<CreateTeamPage />} /> 
             <Route path="/matches/:matchId/select-cvc" element={<CVCSelectionPage />} />
@@ -54,6 +67,7 @@ function App() {
   path="/matches/:matchId/contests/:contestId/join"
   element={<JoinContestPage />}
 />
+            <Route path="/contests/:contestId/leaderboard" element={<LeaderboardPage />} />
 
             {/* Protected */}
             <Route path="/home" element={user ? <Home /> : <Navigate to="/login" />} />
@@ -62,6 +76,11 @@ function App() {
 
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/wallet" element={<Wallet />} />
+              <Route path="/my-teams" element={<MyTeams />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/leaderboard" element={<GlobalLeaderboard />} />
+              <Route path="/support" element={<Support />} />
             </Route>
           </Routes>
         </main>

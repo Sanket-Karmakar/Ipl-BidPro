@@ -18,12 +18,30 @@ export async function fetchAndStorePlayerStats(playerName) {
     }
 
     try {
+        // --- Step 0: Check if player already exists in our DB (FAST PATH) ---
+        const existingPlayer = await Player.findOne({
+            name: { $regex: new RegExp(`^${playerName.trim()}$`, 'i') }
+        });
+
+        // Only skip API call if the player has complete data (stats + role populated)
+        const isComplete = existingPlayer && 
+            existingPlayer.stats && existingPlayer.stats.length > 0 && 
+            existingPlayer.role;
+
+        if (isComplete) {
+            console.log(`⚡ Found "${playerName}" in local DB with complete data — skipping CricAPI calls.`);
+            return existingPlayer;
+        }
+
+        if (existingPlayer) {
+            console.log(`⚠️ Found "${playerName}" in DB but data is incomplete — re-fetching from API...`);
+        }
+
         // --- Step 1: Search player by name to get CricAPI ID ---
         const searchUrl = `${CRICAPI_BASE_URL}/players?apikey=${CRICAPI_KEY}&offset=0&search=${playerName.trim()}`;
         console.log("🟢 DEBUG: Search URL:", searchUrl);
 
         const searchResponse = await axios.get(searchUrl);
-        console.log("📥 DEBUG: CricAPI search response:", JSON.stringify(searchResponse.data, null, 2));
 
         const { status, data: resultData, reason } = searchResponse.data;
 
@@ -43,7 +61,6 @@ export async function fetchAndStorePlayerStats(playerName) {
         console.log("🟢 DEBUG: Player Info URL:", playerInfoUrl);
 
         const playerInfoResponse = await axios.get(playerInfoUrl);
-        console.log("📥 DEBUG: CricAPI player info response:", JSON.stringify(playerInfoResponse.data, null, 2));
 
         const { status: infoStatus, data: infoData, reason: infoReason } = playerInfoResponse.data;
 
@@ -85,5 +102,47 @@ export async function fetchAndStorePlayerStats(playerName) {
         }
 
         return null;
+    }
+}
+
+export async function searchPlayersAPI(query) {
+    if (!query) return [];
+
+    try {
+        // --- FAST PATH: Check local DB first ---
+        const localResults = await Player.find(
+            { name: { $regex: query, $options: 'i' } },
+            { name: 1, country: 1, playerId: 1, playerImg: 1 }
+        ).limit(10).lean();
+
+        if (localResults.length > 0) {
+            console.log(`⚡ Found ${localResults.length} local suggestions for "${query}"`);
+            return localResults.map(p => ({
+                id: p.playerId,
+                name: p.name,
+                country: p.country,
+                playerImg: p.playerImg || ''
+            }));
+        }
+
+        // --- SLOW PATH: Fallback to CricAPI if nothing in DB ---
+        const searchUrl = `${CRICAPI_BASE_URL}/players?apikey=${CRICAPI_KEY}&offset=0&search=${encodeURIComponent(query)}`;
+        const searchResponse = await axios.get(searchUrl);
+        const { status, data: resultData } = searchResponse.data;
+
+        if (status !== "success" || !resultData) {
+            return [];
+        }
+
+        // Return first 10 suggestions max
+        const results = Array.isArray(resultData) ? resultData : [resultData];
+        return results.slice(0, 10).map(p => ({
+            id: p.id,
+            name: p.name,
+            country: p.country
+        }));
+    } catch (error) {
+        console.error("Error in searchPlayersAPI:", error.message);
+        return [];
     }
 }

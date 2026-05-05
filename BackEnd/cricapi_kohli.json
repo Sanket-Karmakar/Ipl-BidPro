@@ -1,0 +1,1227 @@
+{
+  "apikey": "2792103a-389c-4880-b661-d9c21e2c71b7",
+  "data": {
+    "id": "c61d247d-7f77-452c-b495-2813a9cd0ac4",
+    "name": "Virat Kohli",
+    "dateOfBirth": "1988-11-05T00:00:00",
+    "role": "Batsman",
+    "battingStyle": "Right Handed Bat",
+    "bowlingStyle": "Right-arm medium",
+    "placeOfBirth": "Delhi",
+    "country": "India",
+    "playerImg": "https://h.cricapi.com/img/players/c61d247d-7f77-452c-b495-2813a9cd0ac4.jpg",
+    "stats": [
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "m",
+        "value": "123"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "inn",
+        "value": "210"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "no",
+        "value": "13"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "runs",
+        "value": "9230"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "hs",
+        "value": "254"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "avg",
+        "value": "46.85"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "bf",
+        "value": "16608"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "sr",
+        "value": "55.58"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "100s",
+        "value": "30"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "200s",
+        "value": "7"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "50s",
+        "value": "31"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "4s",
+        "value": "1027"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": "6s",
+        "value": "30"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "m",
+        "value": "296"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "inn",
+        "value": "284"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "no",
+        "value": "44"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "runs",
+        "value": "13911"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "hs",
+        "value": "183"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "avg",
+        "value": "57.96"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "bf",
+        "value": "14874"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "sr",
+        "value": "93.53"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "100s",
+        "value": "50"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "200s",
+        "value": "0"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "50s",
+        "value": "72"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "4s",
+        "value": "1303"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": "6s",
+        "value": "152"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "m",
+        "value": "125"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "inn",
+        "value": "117"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "no",
+        "value": "31"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "runs",
+        "value": "4188"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "hs",
+        "value": "122"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "avg",
+        "value": "48.7"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "bf",
+        "value": "3056"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "sr",
+        "value": "137.04"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "100s",
+        "value": "1"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "200s",
+        "value": "0"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "50s",
+        "value": "38"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "4s",
+        "value": "369"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20i",
+        "stat": "6s",
+        "value": "124"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "m",
+        "value": "252"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "inn",
+        "value": "244"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "no",
+        "value": "37"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "runs",
+        "value": "8004"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "hs",
+        "value": "113"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "avg",
+        "value": "38.67"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "bf",
+        "value": "6065"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "sr",
+        "value": "131.97"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "100s",
+        "value": "8"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "200s",
+        "value": "0"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "50s",
+        "value": "55"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "4s",
+        "value": "705"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": "6s",
+        "value": "272"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "m",
+        "value": "123"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "inn",
+        "value": "11"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "b",
+        "value": "175"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "runs",
+        "value": "84"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "wkts",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "bbi",
+        "value": "0/0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "bbm",
+        "value": "0/0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "econ",
+        "value": "2.88"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "avg",
+        "value": "0.0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "sr",
+        "value": "0.0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "5w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": "10w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "m",
+        "value": "296"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "inn",
+        "value": "50"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "b",
+        "value": "662"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "runs",
+        "value": "680"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "wkts",
+        "value": "5"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "bbi",
+        "value": "1/13"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "bbm",
+        "value": "1/13"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "econ",
+        "value": "6.16"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "avg",
+        "value": "136.0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "sr",
+        "value": "132.4"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "5w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": "10w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "m",
+        "value": "125"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "inn",
+        "value": "13"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "b",
+        "value": "152"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "runs",
+        "value": "204"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "wkts",
+        "value": "4"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "bbi",
+        "value": "1/13"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "bbm",
+        "value": "1/13"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "econ",
+        "value": "8.05"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "avg",
+        "value": "51.0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "sr",
+        "value": "38.0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "5w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20i",
+        "stat": "10w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "m",
+        "value": "252"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "inn",
+        "value": "26"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "b",
+        "value": "251"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "runs",
+        "value": "368"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "wkts",
+        "value": "4"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "bbi",
+        "value": "2/25"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "bbm",
+        "value": "2/25"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "econ",
+        "value": "8.8"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "avg",
+        "value": "92.0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "sr",
+        "value": "62.75"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "5w",
+        "value": "0"
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": "10w",
+        "value": "0"
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " m ",
+        "value": " 123 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " inn ",
+        "value": " 210 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " runs ",
+        "value": " 9230 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " bf ",
+        "value": " 16608 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " hs ",
+        "value": " 254 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " avg ",
+        "value": " 46.85 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " sr ",
+        "value": " 55.58 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " no ",
+        "value": " 13 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " 4s ",
+        "value": " 1027 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " 6s ",
+        "value": " 30 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " 50 ",
+        "value": " 31 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " 100 ",
+        "value": " 30 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "test",
+        "stat": " 200 ",
+        "value": " 7 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " m ",
+        "value": " 303 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " inn ",
+        "value": " 291 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " runs ",
+        "value": " 14181 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " bf ",
+        "value": " 15200 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " hs ",
+        "value": " 183 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " avg ",
+        "value": " 57.65 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " sr ",
+        "value": " 93.30 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " no ",
+        "value": " 45 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " 4s ",
+        "value": " 1325 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " 6s ",
+        "value": " 153 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " 50 ",
+        "value": " 74 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " 100 ",
+        "value": " 51 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "odi",
+        "stat": " 200 ",
+        "value": " 0 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " m ",
+        "value": " 125 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " inn ",
+        "value": " 117 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " runs ",
+        "value": " 4188 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " bf ",
+        "value": " 3056 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " hs ",
+        "value": " 122 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " avg ",
+        "value": " 48.7 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " sr ",
+        "value": " 137.05 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " no ",
+        "value": " 31 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " 4s ",
+        "value": " 369 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " 6s ",
+        "value": " 124 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " 50 ",
+        "value": " 38 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " 100 ",
+        "value": " 1 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "t20",
+        "stat": " 200 ",
+        "value": " 0 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " m ",
+        "value": " 267 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " inn ",
+        "value": " 259 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " runs ",
+        "value": " 8661 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " bf ",
+        "value": " 6519 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " hs ",
+        "value": " 113 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " avg ",
+        "value": " 39.55 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " sr ",
+        "value": " 132.86 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " no ",
+        "value": " 40 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " 4s ",
+        "value": " 771 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " 6s ",
+        "value": " 291 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " 50 ",
+        "value": " 63 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " 100 ",
+        "value": " 8 "
+      },
+      {
+        "fn": "batting",
+        "matchtype": "ipl",
+        "stat": " 200 ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " m ",
+        "value": " 123 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " inn ",
+        "value": " 11 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " b ",
+        "value": " 175 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " runs ",
+        "value": " 84 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " wkts ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " avg ",
+        "value": " 0.0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " econ ",
+        "value": " 2.88 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " sr ",
+        "value": " 0.0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " bbi ",
+        "value": " 0/0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " bbm ",
+        "value": " 0/0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " 5w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "test",
+        "stat": " 10w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " m ",
+        "value": " 303 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " inn ",
+        "value": " 50 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " b ",
+        "value": " 662 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " runs ",
+        "value": " 680 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " wkts ",
+        "value": " 5 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " avg ",
+        "value": " 136.0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " econ ",
+        "value": " 6.16 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " sr ",
+        "value": " 132.4 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " bbi ",
+        "value": " 1/13 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " bbm ",
+        "value": " 1/13 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " 5w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "odi",
+        "stat": " 10w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " m ",
+        "value": " 125 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " inn ",
+        "value": " 13 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " b ",
+        "value": " 152 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " runs ",
+        "value": " 204 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " wkts ",
+        "value": " 4 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " avg ",
+        "value": " 51.0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " econ ",
+        "value": " 8.05 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " sr ",
+        "value": " 38.0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " bbi ",
+        "value": " 1/13 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " bbm ",
+        "value": " 1/13 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " 5w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "t20",
+        "stat": " 10w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " m ",
+        "value": " 267 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " inn ",
+        "value": " 26 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " b ",
+        "value": " 251 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " runs ",
+        "value": " 368 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " wkts ",
+        "value": " 4 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " avg ",
+        "value": " 92.0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " econ ",
+        "value": " 8.8 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " sr ",
+        "value": " 62.75 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " bbi ",
+        "value": " 2/25 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " bbm ",
+        "value": " 2/25 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " 5w ",
+        "value": " 0 "
+      },
+      {
+        "fn": "bowling",
+        "matchtype": "ipl",
+        "stat": " 10w ",
+        "value": " 0 "
+      }
+    ]
+  },
+  "status": "success",
+  "info": {
+    "hitsToday": 56,
+    "hitsUsed": 1,
+    "hitsLimit": 2000,
+    "credits": 0,
+    "server": 11,
+    "queryTime": 23.0975,
+    "s": 0,
+    "cache": 0
+  }
+}

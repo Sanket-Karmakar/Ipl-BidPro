@@ -14,7 +14,7 @@ const MatchesPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5001/api/matches/${activeTab}`)
+    fetch(`/api/matches/${activeTab}`)
       .then((res) => res.json())
       .then((data) => {
         setMatches(data || []);

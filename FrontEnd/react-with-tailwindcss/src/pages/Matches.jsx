@@ -23,7 +23,7 @@ function Matches() {
     if (activeTab === "completed") endpoint = "/api/matches/completed";
 
     setLoading(true);
-    fetch(`http://localhost:5001${endpoint}`)
+    fetch(`${endpoint}`)
       .then((res) => res.json())
       .then((data) => {
         setMatches(Array.isArray(data) ? data : []);

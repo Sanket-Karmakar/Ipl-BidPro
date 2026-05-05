@@ -25,6 +25,7 @@ function MatchCard({ match }) {
     state: { status, matchEnded },
   })
 }
+      className="bg-white rounded-2xl shadow-md p-5 cursor-pointer border border-gray-100"
     >
       {/* Teams */}
       <div className="flex items-center justify-between">
@@ -60,14 +61,28 @@ function MatchCard({ match }) {
                 </p>
               ))}
             </div>
-          ) : (
-            <p className="text-xs text-gray-400">No scorecard available</p>
-          )}
+          ) : null}
           <p className="mt-1 text-sm font-bold text-green-600">{status}</p>
         </div>
       ) : (
         // Upcoming/Ongoing
-        <p className="mt-2 text-center text-sm text-blue-500">{status}</p>
+        <div className="mt-2 text-center">
+          <p className="text-sm text-blue-500 mb-3">{status}</p>
+          {status === 'UPCOMING' && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/matches/${matchId}/preview`);
+              }}
+              className="w-full py-2 bg-gradient-to-r from-[#0f172a] to-[#1e293b] text-white text-xs font-bold rounded-lg shadow-sm hover:from-[#1e293b] hover:to-[#334155] transition flex items-center justify-center gap-1"
+            >
+              <svg className="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Fantasy Tips & Preview
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

@@ -24,7 +24,7 @@ export default function Signup() {
       formData.append("password", password);
       if (profileImage) formData.append("profileImage", profileImage);
 
-      const res = await fetch("http://localhost:5001/api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         body: formData, // ✅ no headers for multipart
       });

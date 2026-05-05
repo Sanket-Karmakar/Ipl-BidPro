@@ -5,63 +5,53 @@ dotenv.config();
 const BASE_URL = process.env.CRICAPI_BASE_URL;
 const API_KEY = process.env.CRIC_API_KEY;
 
-// fetch all matches (defensive parsing & normalization)
-export async function fetchMatchesFromAPI () {
+// fetch all matches (prefers currentMatches for live scores)
+export async function fetchMatchesFromAPI() {
     try {
-        const response = await axios.get(`${BASE_URL}/matches`, {
+        // 1. Try fetching from currentMatches (better for live scores)
+        console.log("[CricAPI] Fetching matches from currentMatches...");
+        const response = await axios.get(`${BASE_URL}/currentMatches`, {
             params: { apikey: API_KEY },
             timeout: 15000
         });
 
-        // log useful debugging info but avoid huge dumps in prod
-        console.log("CricAPI response status:", response.status);
-
-        if (!response.data) {
-            throw new Error('Empty response from CricAPI');
+        if (!response.data || response.data.status !== "success") {
+            console.warn("[CricAPI] currentMatches failed, falling back to /matches...");
+            // Fallback to /matches
+            const fbResponse = await axios.get(`${BASE_URL}/matches`, {
+                params: { apikey: API_KEY },
+                timeout: 15000
+            });
+            return processMatchesPayload(fbResponse.data);
         }
 
-        // many cricapi endpoints use response.data.data or response.data.matches
-        const payload = response.data.data ?? response.data.matches ?? response.data;
-
-        if (!Array.isArray(payload)) {
-            // Try to handle object with nested data
-            if (Array.isArray(payload.matches)) {
-                return payload.matches;
-            }
-            console.warn(`Unexpected CricAPI structure, returning empty. Received keys: ${Object.keys(response.data)}`);
-            return [];
-        }
-
-        const now = new Date();
-
-        // Normalize fields: uniqueId, dateTimeGMT, matchEnded, matchStarted
-        const normalized = payload.map(m => {
-            return {
-                ...m,
-                uniqueId: m.uniqueId ?? m.unique_id ?? m.id ?? m.match_id ?? m.matchId,
-                dateTimeGMT: m.dateTimeGMT ?? m.date_time_gmt ?? m.dateTime ?? m.start_time ?? m.date,
-                matchEnded: m.matchEnded ?? m.match_ended ?? m.ended ?? false,
-                matchStarted: m.matchStarted ?? m.match_started ?? m.started ?? false
-            };
-        });
-
-        // choose upcoming by date and not ended (but don't filter out ongoing if desired elsewhere)
-        const upcoming = normalized.filter(m => {
-            try {
-                if (!m.dateTimeGMT) return false;
-                const dt = new Date(m.dateTimeGMT);
-                return dt > now && !m.matchEnded;
-            } catch (e) {
-                return false;
-            }
-        });
-
-        console.log("CricAPI: fetched", normalized.length, "raw matches —", upcoming.length, "upcoming selected");
-        return normalized; // return normalized full set; service layer will pick what to upsert
+        return processMatchesPayload(response.data);
     } catch (error) {
         console.error(`Error fetching matches from CricAPI:`, error?.message ?? error);
         return [];
     }
+}
+
+function processMatchesPayload(data) {
+    if (!data) return [];
+    const payload = data.data ?? data.matches ?? data;
+
+    if (!Array.isArray(payload)) {
+        if (payload.matches && Array.isArray(payload.matches)) return payload.matches;
+        console.warn("Unexpected CricAPI structure, returning empty.");
+        return [];
+    }
+
+    // Normalize fields
+    return payload.map(m => {
+        return {
+            ...m,
+            uniqueId: m.uniqueId ?? m.unique_id ?? m.id ?? m.match_id ?? m.matchId,
+            dateTimeGMT: m.dateTimeGMT ?? m.date_time_gmt ?? m.dateTime ?? m.start_time ?? m.date,
+            matchEnded: m.matchEnded ?? m.match_ended ?? m.ended ?? false,
+            matchStarted: m.matchStarted ?? m.match_started ?? m.started ?? false
+        };
+    });
 }
 
 // fetch match details by id (keeps behavior but returns normalized object)

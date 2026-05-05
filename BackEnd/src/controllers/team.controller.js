@@ -26,6 +26,47 @@ export const createTeam = async (req, res) => {
   }
 };
 
+// @desc    Get ALL teams for logged-in user (across all matches)
+// @route   GET /api/teams/all/my-teams
+// @access  Private
+export const getAllUserTeams = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Get all teams for this user
+    const teams = await Team.find({ userId })
+      .populate("contestId", "title entryFee prizePool status")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Get unique matchIds
+    const matchIds = [...new Set(teams.map((t) => t.matchId))];
+
+    // Fetch match data for all those matchIds
+    const { Match } = await import("../models/match.models.js");
+    const matches = await Match.find({ matchId: { $in: matchIds } })
+      .select("matchId name status venue date dateTimeGMT teamInfo teams score matchEnded matchStarted")
+      .lean();
+
+    // Build a matchId → match lookup
+    const matchMap = {};
+    for (const m of matches) {
+      matchMap[m.matchId] = m;
+    }
+
+    // Attach match data to each team
+    const enriched = teams.map((t) => ({
+      ...t,
+      matchData: matchMap[t.matchId] || null,
+    }));
+
+    res.status(200).json({ success: true, teams: enriched });
+  } catch (error) {
+    console.error("Error fetching all user teams:", error);
+    res.status(500).json({ success: false, message: error.message || "Server Error" });
+  }
+};
+
 export const getTeamsByMatch = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { matchId } = req.params;

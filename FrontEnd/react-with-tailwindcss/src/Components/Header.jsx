@@ -46,18 +46,30 @@ const Header = () => {
       {user && (
         <div className="flex items-center gap-6">
           {/* Nav */}
-          <nav className="hidden md:flex gap-6 text-gray-300 font-medium">
+          <nav className="hidden md:flex gap-6 text-gray-300 font-medium items-center">
             <Link to="/home" className="hover:text-yellow-400 transition">
               Home
             </Link>
             <Link to="/matches" className="hover:text-yellow-400 transition">
               Matches
             </Link>
+            <Link to="/compare-players" className="hover:text-[#009270] transition flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+              </svg>
+              Compare
+            </Link>
+            <Link to="/scorecards" className="hover:text-yellow-400 transition text-red-400 font-bold ml-2">
+              IPL Scoreboard
+            </Link>
           </nav>
 
           {/* Wallet */}
-          <div className="bg-yellow-400 text-black px-3 py-1 rounded-full font-semibold shadow cursor-pointer hover:bg-yellow-300">
-            $ 1000
+          <div 
+            onClick={() => navigate('/wallet')}
+            className="bg-yellow-400 text-black px-3 py-1 rounded-full font-semibold shadow cursor-pointer hover:bg-yellow-300 transition"
+          >
+            ₹ {user?.virtualCash ?? 0}
           </div>
 
           {/* Profile dropdown */}
@@ -67,10 +79,10 @@ const Header = () => {
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
             <img
-  src={user?.profileImage ? `http://localhost:5001${user.profileImage}` : "/default-avatar.png"}
-  alt="Profile"
-  className="h-10 w-10 rounded-full object-cover"
-/>
+              src={user?.profileImageUrl || user?.profileImage || "https://via.placeholder.com/40"}
+              alt="Profile"
+              className="h-10 w-10 rounded-full object-cover border border-gray-300"
+            />
               <ChevronDownIcon className="w-4 h-4 text-gray-300" />
             </button>
 

@@ -38,6 +38,10 @@ const playerSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    biography: {
+        type: String,
+        default: ""
+    },
     stats: [statsSchema]
 }, {timestamps: true});
 

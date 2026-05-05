@@ -8,20 +8,43 @@ export const AuthProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // ✅ Refresh user from database
+  const refreshUser = async () => {
+    const savedToken = localStorage.getItem("accessToken");
+    if (!savedToken) return;
+    try {
+      const res = await fetch("/api/users/me", {
+        headers: {
+          "Authorization": `Bearer ${savedToken}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+    } catch (err) {
+      console.error("Failed to refresh user:", err);
+    }
+  };
+
   // ✅ Load user + token from localStorage when app starts
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("accessToken");
 
     if (savedUser) setUser(JSON.parse(savedUser));
-    if (savedToken) setAccessToken(savedToken);
+    if (savedToken) {
+      setAccessToken(savedToken);
+      refreshUser();
+    }
   }, []);
 
   // ✅ Login function
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5001/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -59,7 +82,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token: accessToken, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token: accessToken, login, logout, refreshUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

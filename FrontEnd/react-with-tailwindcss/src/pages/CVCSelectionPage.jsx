@@ -69,7 +69,7 @@ export default function CVCSelectionPage() {
 
       let res;
       if (editTeam) {
-        res = await fetch(`http://localhost:5001/api/teams/${editTeam._id}`, {
+        res = await fetch(`/api/teams/${editTeam._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export default function CVCSelectionPage() {
           body: JSON.stringify(payload),
         });
       } else {
-        res = await fetch("http://localhost:5001/api/teams", {
+        res = await fetch("/api/teams", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

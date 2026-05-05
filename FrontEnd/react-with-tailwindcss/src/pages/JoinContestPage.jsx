@@ -30,7 +30,7 @@ export default function JoinContestPage() {
 
       setLoadingTeams(true);
       try {
-        const res = await fetch(`http://localhost:5001/api/teams/${matchId}`, {
+        const res = await fetch(`/api/teams/${matchId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) {
@@ -60,7 +60,7 @@ export default function JoinContestPage() {
     async function fetchContest() {
       if (contestFromState) return;
       try {
-        const res = await fetch(`http://localhost:5001/api/contests/${contestId}`);
+        const res = await fetch(`/api/contests/${contestId}`);
         if (!res.ok) return;
         const data = await res.json();
         if (!mounted) return;
@@ -102,7 +102,7 @@ export default function JoinContestPage() {
       console.log("Joining with payload:", payload);
 
       setJoining(true);
-      const res = await fetch("http://localhost:5001/api/contests/join", {
+      const res = await fetch("/api/contests/join", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

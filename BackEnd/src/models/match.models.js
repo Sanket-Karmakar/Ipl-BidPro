@@ -78,7 +78,10 @@ const matchSchema = new mongoose.Schema({
     hasSquad: { type: Boolean, default: false },
     squads: [ squadSchema ],
     matchStarted: { type: Boolean, default: false },
-    matchEnded: { type: Boolean, default: false }
+    matchEnded: { type: Boolean, default: false },
+    scorecardData: { type: mongoose.Schema.Types.Mixed, default: null },
+    scorecardLastFetched: { type: Date, default: null },
+    previewData: { type: mongoose.Schema.Types.Mixed, default: null } // Cache for AI-generated Match Preview
 }, { timestamps: true });
 
 // ensure index (will be created on startup if autoIndex=true)

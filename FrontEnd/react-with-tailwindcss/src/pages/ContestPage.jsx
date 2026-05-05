@@ -31,7 +31,7 @@ export default function ContestPage() {
       setLoadingContests(true);
       try {
         const res = await fetch(
-          `http://localhost:5001/api/contests/available?matchId=${matchId}`
+          `/api/contests/available?matchId=${matchId}`
         );
         if (!res.ok) {
           setContests([]);
@@ -64,7 +64,7 @@ export default function ContestPage() {
           return;
         }
         const res = await fetch(
-          `http://localhost:5001/api/contests/my-contests?userId=${user._id}&matchId=${matchId}`,
+          `/api/contests/my-contests?userId=${user._id}&matchId=${matchId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!res.ok) {
@@ -97,7 +97,7 @@ export default function ContestPage() {
           setTeams([]);
           return;
         }
-        const res = await fetch(`http://localhost:5001/api/teams/${matchId}`, {
+        const res = await fetch(`/api/teams/${matchId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) {
@@ -141,7 +141,7 @@ export default function ContestPage() {
     if (!window.confirm("Are you sure you want to remove this team?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5001/api/teams/${teamId}`, {
+      const res = await fetch(`/api/teams/${teamId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -186,10 +186,19 @@ export default function ContestPage() {
     const spotsLeft = Math.max(maxTeams - spotsFilled, 0);
     const progress = Math.min(100, Math.round((spotsFilled / maxTeams) * 100));
 
+    const hasJoined = contest.joinedUsers?.some(
+      (j) => String(j.userId?._id || j.userId) === String(user?._id)
+    );
+
     return (
       <div
         key={contest._id}
-        className="bg-white shadow-md rounded-xl p-4 mb-4 hover:shadow-lg transition"
+        onClick={() => {
+          if (isBlocked || hasJoined) {
+            navigate(`/contests/${contest._id}/leaderboard`);
+          }
+        }}
+        className="bg-white shadow-md rounded-xl p-4 mb-4 hover:shadow-lg transition cursor-pointer"
       >
         <div className="flex items-start justify-between">
           <div>
@@ -205,6 +214,11 @@ export default function ContestPage() {
             <p className="text-sm text-gray-700 font-semibold">
               {contest.status || "Upcoming"}
             </p>
+            {hasJoined && (
+              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold mt-1 inline-block">
+                JOINED
+              </span>
+            )}
           </div>
         </div>
 
@@ -223,18 +237,38 @@ export default function ContestPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-4">
-          <button
-            onClick={() => handleJoinContest(contest)}
-            className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-60"
-            disabled={isBlocked}
-          >
-            JOIN
-          </button>
-          {(!teams || teams.length === 0) && (
+        <div className="mt-4 flex flex-col gap-2">
+          {!hasJoined && !isBlocked && (
             <button
-              onClick={() => navigate(`/matches/${matchId}/create-team`)}
-              className="w-full mt-2 border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleJoinContest(contest);
+              }}
+              className="w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700"
+            >
+              JOIN
+            </button>
+          )}
+
+          {(isBlocked || hasJoined) && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/contests/${contest._id}/leaderboard`);
+              }}
+              className="w-full bg-[#009270] text-white py-2 rounded-lg font-semibold hover:bg-[#007b5e]"
+            >
+              VIEW LEADERBOARD
+            </button>
+          )}
+
+          {(!teams || teams.length === 0) && !hasJoined && !isBlocked && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/matches/${matchId}/create-team`);
+              }}
+              className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-50"
             >
               CREATE A TEAM
             </button>
@@ -246,7 +280,8 @@ export default function ContestPage() {
 
   // ✅ Tab rendering
   const renderContent = () => {
-    if (isBlocked) {
+    // Only block the "contests" tab for joining — allow "mycontests" and "teams" always
+    if (isBlocked && activeTab === "contests") {
       return (
         <div className="flex flex-col items-center justify-center h-[60vh] text-center">
           <p className="text-gray-700 mb-4 font-medium">

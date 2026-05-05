@@ -58,12 +58,12 @@ export const joinContest = async (req, res) => {
       return res.status(400).json({ message: "Invalid team or team does not belong to this match." });
     }
 
-    // Check if user already joined with this team
+    // Check if user already joined this contest with ANY team
     const alreadyJoined = contest.joinedUsers.some(
-      (j) => String(j.userId) === String(userId) && String(j.teamId) === String(teamId)
+      (j) => String(j.userId) === String(userId)
     );
     if (alreadyJoined) {
-      return res.status(400).json({ message: "You already joined this contest with this team." });
+      return res.status(400).json({ message: "You already joined this contest with a team." });
     }
 
     // ---------------- User Validation ----------------

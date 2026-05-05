@@ -15,7 +15,7 @@ export default function ViewTeamPage() {
       try {
         if (!token) return;
 
-        const res = await fetch(`http://localhost:5001/api/teams/${matchId}`, {
+        const res = await fetch(`/api/teams/${matchId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

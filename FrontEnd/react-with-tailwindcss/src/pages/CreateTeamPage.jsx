@@ -16,7 +16,7 @@ export default function CreateTeamPage() {
   useEffect(() => {
     async function fetchSquads() {
       try {
-        const res = await fetch(`http://localhost:5001/api/matches/${matchId}/squads`);
+        const res = await fetch(`/api/matches/${matchId}/squads`);
         const data = await res.json();
 
         if (data?.squads?.length) {
@@ -99,21 +99,28 @@ export default function CreateTeamPage() {
 
       <PlayerList players={players} selectedPlayers={selectedPlayers} toggleSelect={toggleSelect} />
 
-      <div className="sticky bottom-0 left-0 w-full flex justify-between p-4 bg-white shadow-md">
-        <button className="bg-gray-200 px-6 py-2 rounded-lg font-semibold">Preview</button>
-        <button
-          disabled={!isValidTeam}
-          onClick={() =>
-            navigate(`/matches/${matchId}/select-cvc`, {
-              state: { selectedPlayers, matchId, editTeam },
-            })
-          }
-          className={`px-6 py-2 rounded-lg font-semibold ${
-            !isValidTeam ? "bg-gray-400 text-white cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
-          }`}
-        >
-          {editTeam ? "Continue to Edit" : "Next"}
-        </button>
+      <div className="sticky bottom-0 left-0 w-full p-4 bg-white shadow-md border-t">
+        <div className="flex justify-between w-full max-w-3xl mx-auto">
+          <button className="bg-gray-200 px-6 py-2 rounded-lg font-semibold">Preview</button>
+          <button
+            disabled={!isValidTeam}
+            onClick={() =>
+              navigate(`/matches/${matchId}/select-cvc`, {
+                state: { selectedPlayers, matchId, editTeam },
+              })
+            }
+            className={`px-6 py-2 rounded-lg font-semibold transition ${
+              !isValidTeam ? "bg-gray-400 text-white cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+          >
+            {editTeam ? "Continue to Edit" : "Next"}
+          </button>
+        </div>
+        {!isValidTeam && selectedPlayers.length === 11 && (
+          <p className="text-center text-red-500 font-semibold text-sm mt-3">
+            Invalid team: You must select max 7 players from one team and keep total credits ≤ 100.
+          </p>
+        )}
       </div>
     </div>
   );

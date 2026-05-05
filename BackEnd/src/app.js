@@ -9,6 +9,7 @@ import matchRoutes from './routes/match.routes.js';
 import squadsRoute from './routes/squad.routes.js';
 import teamRoutes from "./routes/team.routes.js";
 import contestRoutes from './routes/contest.routes.js';   // ✅ contest routes
+import scorecardRoutes from './routes/scorecard.routes.js'; // ✅ scorecard + bbb routes
 import connectDB from './db/index.js';
 import path from "path";
 import './jobs/scheduler.js';
@@ -46,6 +47,7 @@ app.get("/health", (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/matches', matchRoutes);
+app.use('/api/matches', scorecardRoutes); // scorecard + ball-by-ball endpoints
 app.use('/api/players', playerRoutes);
 app.use('/api', squadsRoute);
 app.use("/api/teams", teamRoutes);
@@ -59,8 +61,18 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: "Not found" });
 });
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("GLOBAL ERROR:", err);
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    errors: err.errors || [],
+  });
+});
+
 // Connect to DB and start server
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5005;
 
 connectDB()
   .then(() => {

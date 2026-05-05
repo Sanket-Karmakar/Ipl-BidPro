@@ -1,6 +1,6 @@
 import { Match } from '../models/match.models.js';
-import { getUpcomingMatches, getCompletedMatches, getOngoingMatches } from '../services/matchService.js';
-
+import { getUpcomingMatches, getCompletedMatches, getOngoingMatches, getIpl2026Matches } from '../services/matchService.js';
+import { generateMatchPreview } from '../services/preview.service.js';
 
 export const getAllMatches = async (req, res) => {
     try {
@@ -17,12 +17,13 @@ export const getAllMatches = async (req, res) => {
         const filter = (excludePlaceholders === 'true')
             ? {
                 $and: [
+                    { series_id: '87c62aac-bc3c-4738-ab93-19da0690488f' },
                     { "teams.0": { $not: { $regex: /^tbc$/i } } },
                     { "teams.1": { $not: { $regex: /^tbc$/i } } },
                     { venue: { $not: { $regex: /^tbc, tbc$/i } } }
                 ]
             }
-            : {}; // empty filter -> return all matches
+            : { series_id: '87c62aac-bc3c-4738-ab93-19da0690488f' }; // empty filter -> return all matches
 
         const matches = await Match.find(filter, projection)
             .sort({ dateTimeGMT: 1 })
@@ -88,3 +89,23 @@ export const fetchCompletedMatches = async (req, res) => {
     }
 };
 
+export const fetchIpl2026Matches = async (req, res) => {
+    try {
+        const matches = await getIpl2026Matches();
+        return res.status(200).json(matches);
+    } catch (error) {
+        console.error('fetchIpl2026Matches error:', error);
+        return res.status(500).json({ error: 'Failed to fetch IPL matches!', message: error.message });
+    }
+};
+
+export const getMatchPreviewController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const preview = await generateMatchPreview(id);
+        return res.status(200).json({ success: true, data: preview });
+    } catch (error) {
+        console.error('getMatchPreviewController error:', error);
+        return res.status(500).json({ success: false, message: 'Failed to generate match preview!', error: error.message });
+    }
+};
